@@ -14,12 +14,12 @@ import site.hclub.hyndai.service.MemberService;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping("/auth")
 public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("/sign-in")
+    @PostMapping("/login")
     public JwtToken signIn(@RequestBody SignInDto signInDto) {
     	
         String username = signInDto.getUsername();

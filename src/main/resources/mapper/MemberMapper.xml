@@ -5,7 +5,6 @@
 <mapper namespace="site.hclub.hyndai.mapper.MemberMapper">
 
  
-
     <select id="getMemberInfo" resultType="site.hclub.hyndai.domain.MemberVO" parameterType="String">
         select 
 		    member_no as memberNo
