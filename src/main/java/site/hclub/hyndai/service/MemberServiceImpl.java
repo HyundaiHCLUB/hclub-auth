@@ -65,4 +65,10 @@ public class MemberServiceImpl implements MemberService{
 		
 		return TokenMapper.insertTokenMemberInfo(jwtToken);
 	}
+
+	@Override
+	public MemberVO getMemberInfo(String userId) {
+		
+		return memberMapper.getMemberInfo(userId);
+	}
 }
