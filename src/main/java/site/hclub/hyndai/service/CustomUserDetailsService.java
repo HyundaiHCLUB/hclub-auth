@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.mapper.MemberMapper;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import java.util.stream.Collectors;
 
@@ -23,12 +25,13 @@ import java.util.stream.Collectors;
  * ===========================
  */
 @Service
-@RequiredArgsConstructor
 @Log4j
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final PasswordEncoder passwordEncoder;
-    private final MemberMapper memberMapper;
+	@Autowired
+    private PasswordEncoder passwordEncoder;
+	@Autowired
+    private MemberMapper memberMapper;
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
@@ -38,7 +41,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (member == null) {
             throw new UsernameNotFoundException("해당하는 회원을 찾을 수 없습니다.");
         }
-        return createUserDetails(member);
+       return createUserDetails(member);
     }
 
     private UserDetails createUserDetails(MemberVO member) {

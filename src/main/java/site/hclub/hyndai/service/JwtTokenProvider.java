@@ -14,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -24,8 +25,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import site.hclub.hyndai.domain.JwtToken;
+import site.hclub.hyndai.mapper.MemberMapper;
 
 /**
  * @author 김은솔
@@ -42,11 +45,11 @@ import site.hclub.hyndai.domain.JwtToken;
 public class JwtTokenProvider {
     private final Key key;
 
-   /* @Autowired
-    private CustomUserDetailsService customUserDetailsService; */
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService ;
     
     // application.yml에서 secret 값 가져와서 key에 저장한
-    public JwtTokenProvider(@Value("${jwt-secret}") String secretKey) {
+   public JwtTokenProvider(@Value("${jwt-secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -83,23 +86,12 @@ public class JwtTokenProvider {
     }
 
     // Jwt 토큰을 복호화하여 토큰에 들어있는 정보를 꺼낸다.
-    public Authentication getAuthentication(String accessToken) {
-        // Jwt 토큰 복호화
+   public Authentication getAuthentication(String accessToken) {
+	   
+        // 토큰 복호화
         Claims claims = parseClaims(accessToken);
-       
-        if (claims.get("auth") == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
-        }
-
-        // 클레임에서 권한 정보 가져오기
-        Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get("auth").toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-       
-        // UserDetails 객체를 만들어서 Authentication return
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
-       // UserDetails principal = customUserDetailsService.loadUserByUsername(accessToken)
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(claims.getSubject());
+        return new UsernamePasswordAuthenticationToken(userDetails, accessToken, userDetails.getAuthorities());
     }
 
     // 토큰 정보를 검증한다.

@@ -98,7 +98,7 @@ $(document).ready(function() {
             data: JSON.stringify({ username: username, password: password }),
             success: function(response) {
                 console.log('로그인 성공! 토큰:', response);
-              //  getUserInfo(response.accessToken); // accessToken으로 변경
+                getUserInfo(response.accessToken); // accessToken으로 변경
 
             },
             error: function(xhr, status, error) {

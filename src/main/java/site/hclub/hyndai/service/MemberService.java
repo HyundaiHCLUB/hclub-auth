@@ -1,7 +1,10 @@
 package site.hclub.hyndai.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
+import site.hclub.hyndai.dto.EmployeeDTO;
 
 public interface MemberService {
 	
@@ -22,4 +25,21 @@ public interface MemberService {
 	 처리 내용: 멤버 정보를 확인한다.
 	*/
 	 MemberVO getMemberInfo(String userId);
+
+	 /**
+	 작성자: 김은솔 
+	 처리 내용: 직원여부를 조회한다.
+	*/
+	String getEmployeeYn(EmployeeDTO dto);
+
+	 /**
+	  작성자: 김은솔 
+	  처리 내용: accessToken을 통해 권한 정보를 가진 사용자 정보를 가져온다.
+	*/
+	MemberVO accessMemberInfo(HttpServletRequest authorizationHeader);
+	 /**
+	  작성자: 김은솔 
+	  처리 내용: Header에 담긴 token정보를 resolve한다.
+	*/
+	String resolveToken(HttpServletRequest request);
 }

@@ -19,5 +19,27 @@
 			where
 		member_id = #{memberId}
     </select>
+    <select id="getMemberIdYn" parameterType="String" resultType="int">
+    	select
+    		count(*)
+    	from
+    		member
+    	where
+    		member_id = #{memberId}
+    </select>
+     <select id="getEmployeeYn" parameterType="site.hclub.hyndai.dto.EmployeeDTO" resultType="int">
+     	select 
+     		count(*) 
+     	from 
+     		employee
+     	where employee_no = #{employeeNo}
+     	and employee_name = #{employeeName}
+     </select>
+     <insert id="insertMemberInfo" parameterType="site.hclub.hyndai.domain.MemberVO">
+     INSERT INTO member 
+     ( member_id, member_interest,  employee_no, member_pw, admin_yn ) 
+		VALUES
+	 ( #{memberId}, #{memberInterest}, #{employeeNo}, #{memberPw}, #{adminYn}) 
+     </insert>
 
 </mapper>

@@ -1,16 +1,20 @@
 package site.hclub.hyndai.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
+import site.hclub.hyndai.dto.EmployeeDTO;
 import site.hclub.hyndai.mapper.MemberMapper;
 import site.hclub.hyndai.mapper.TokenMapper;
 
@@ -30,6 +34,7 @@ import site.hclub.hyndai.mapper.TokenMapper;
 public class MemberServiceImpl implements MemberService{
 	
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    
     private final JwtTokenProvider jwtTokenProvider;
     
     @Autowired
@@ -68,7 +73,38 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public MemberVO getMemberInfo(String userId) {
+		return memberMapper.getMemberInfo(userId);
+	}
+
+	@Override
+	public String getEmployeeYn(EmployeeDTO dto) {
+		
+		int cnt = memberMapper.getEmployeeYn(dto);
+		
+		return cnt > 0 ? "Y":"N";
+	}
+
+	@Override
+	public MemberVO accessMemberInfo(HttpServletRequest request) {
+		
+		String accessToken = resolveToken(request);
+		
+		//accessToken을 통해 권한을 가져옴.
+		Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+	
+		String userId = authentication.getName();
+		log.info(authentication.getName());
 		
 		return memberMapper.getMemberInfo(userId);
 	}
+	
+	@Override
+	public String resolveToken(HttpServletRequest request) {
+	    	
+	       String bearerToken = request.getHeader("Authorization");
+	       if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+	           return bearerToken.substring(7);
+	       }
+	       return null;
+	 }
 }
