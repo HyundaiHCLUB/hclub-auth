@@ -11,28 +11,22 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import site.hclub.hyndai.common.response.ApiResponse;
+import site.hclub.hyndai.common.response.SuccessType;
 import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
 import site.hclub.hyndai.dto.SignInDto;
 import site.hclub.hyndai.service.JwtTokenProvider;
 import site.hclub.hyndai.service.MemberService;
-import site.hclub.hyndai.service.SecurityUtil;
-
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-
+import static site.hclub.hyndai.common.response.SuccessType.*;
 
 /**
  * @author 김은솔
@@ -54,7 +48,8 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<JwtToken> signIn(@RequestBody SignInDto signInDto) {
-        
+        //  ResponseEntity<ApiResponse<Club>>
+    	 //  ResponseEntity<ApiResponse<Club>> 
         String userId = signInDto.getUsername();
         String password = signInDto.getPassword();
         log.info("signInDto: "+signInDto.toString());
@@ -65,17 +60,16 @@ public class MemberController {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         log.info("httpHeaders = {}", httpHeaders);
-        
+        //    return ApiResponse.success(SuccessType.CREATE_CLUB_SUCCESS, clubService.save(image, request));
         return ResponseEntity.ok()
                 .headers(httpHeaders)
                 .body(jwtToken);
     }
 
     @PostMapping("/member/info")
-    public ResponseEntity<MemberVO> accessMemberInfo(HttpServletRequest authorizationHeader) {
-       MemberVO memberInfo = memberService.accessMemberInfo(authorizationHeader);
+    public ResponseEntity<ApiResponse<MemberVO>> accessMemberInfo(HttpServletRequest authorizationHeader) {
        
-       return ResponseEntity.ok(memberInfo);
+       return ApiResponse.success(GET_MEMBER_DETAIL_SUCCESS, memberService.accessMemberInfo(authorizationHeader));
     }
 
     @GetMapping("/loginView")
@@ -86,23 +80,22 @@ public class MemberController {
     	return mv;
     }
     @PostMapping("/register")
-    public ResponseEntity<Map<String, Object>> accessMemberInfo(@RequestBody MemberVO mvo){
+    public ResponseEntity<ApiResponse<Void>> accessMemberInfo(@RequestBody MemberVO mvo){
     	Map<String, Object> response = new HashMap<>();
     	
     	int result = memberService.insertMemberInfo(mvo);
     	
-    	return ResponseEntity.ok(response);
+    	return ApiResponse.success(INSERT_MEMBER_INFO_SUCCESS);
     }
     
 
     @PostMapping("/getEmployeeYn")
-    public ResponseEntity<Map<String, Object>> getEmployeeYn(@RequestBody EmployeeDTO dto) {
-        Map<String, Object> response = new HashMap<>();
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getEmployeeYn(@RequestBody EmployeeDTO dto) {
         
+    	Map<String, Object> response = new HashMap<>();
         String isEmployee = memberService.getEmployeeYn(dto);
-        
         response.put("isEmployee", isEmployee);
         
-        return ResponseEntity.ok(response);
+        return ApiResponse.success(GET_EMPLOYEE_YN_SUCCESS, response);
     }
 }

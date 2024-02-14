@@ -91,9 +91,8 @@ public class MemberServiceImpl implements MemberService{
 		
 		//accessToken을 통해 권한을 가져옴.
 		Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-	
+		
 		String userId = authentication.getName();
-		log.info(authentication.getName());
 		
 		return memberMapper.getMemberInfo(userId);
 	}
