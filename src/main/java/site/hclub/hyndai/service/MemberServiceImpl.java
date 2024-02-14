@@ -107,4 +107,10 @@ public class MemberServiceImpl implements MemberService{
 	       }
 	       return null;
 	 }
+
+	@Override
+	public int insertMemberInfo(MemberVO mvo) {
+		
+		return memberMapper.insertMemberInfo(mvo);
+	}
 }

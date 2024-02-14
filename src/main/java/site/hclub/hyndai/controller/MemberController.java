@@ -34,6 +34,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
+/**
+ * @author 김은솔
+ * @description: Security + JWT 기반 MemberController
+ * ===========================
+	   AUTHOR      NOTE
+ * ---------------------------
+ *    김은솔       최초 생성
+ * ===========================
+ */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -61,13 +70,12 @@ public class MemberController {
                 .headers(httpHeaders)
                 .body(jwtToken);
     }
-    
+
     @PostMapping("/member/info")
     public ResponseEntity<MemberVO> accessMemberInfo(HttpServletRequest authorizationHeader) {
-    
        MemberVO memberInfo = memberService.accessMemberInfo(authorizationHeader);
-    	
-        return ResponseEntity.ok(memberInfo);
+       
+       return ResponseEntity.ok(memberInfo);
     }
 
     @GetMapping("/loginView")
@@ -77,11 +85,16 @@ public class MemberController {
     	
     	return mv;
     }
-    
-    @PostMapping("/test")
-    public String test() {
-        return SecurityUtil.getCurrentUsername();
+    @PostMapping("/register")
+    public ResponseEntity<Map<String, Object>> accessMemberInfo(@RequestBody MemberVO mvo){
+    	Map<String, Object> response = new HashMap<>();
+    	
+    	int result = memberService.insertMemberInfo(mvo);
+    	
+    	return ResponseEntity.ok(response);
     }
+    
+
     @PostMapping("/getEmployeeYn")
     public ResponseEntity<Map<String, Object>> getEmployeeYn(@RequestBody EmployeeDTO dto) {
         Map<String, Object> response = new HashMap<>();
