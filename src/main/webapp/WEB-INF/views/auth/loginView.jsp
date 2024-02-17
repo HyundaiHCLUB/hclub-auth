@@ -98,8 +98,8 @@ $(document).ready(function() {
             data: JSON.stringify({ username: username, password: password }),
             success: function(response) {
                 console.log('로그인 성공! 토큰:', response);
-                getUserInfo(response.accessToken); // accessToken으로 변경
-
+                //getUserInfo(response.accessToken); // accessToken으로 변경
+                getUserInfo2(response.accessToken);
             },
             error: function(xhr, status, error) {
                 console.error('로그인 실패:', error);
@@ -124,7 +124,21 @@ function getUserInfo(accessToken) { // refreshToken이 아닌 accessToken으로 
         }
     });
 }
-
+function getUserInfo2(accessToken) { // refreshToken이 아닌 accessToken으로 변경
+    $.ajax({
+        type: 'POST',
+        url: '/auth/test',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken // accessToken 사용
+        },
+        success: function(memberInfo) {
+            console.log('사용자 정보:', memberInfo);
+        },
+        error: function(xhr, status, error) {
+            console.error('사용자 정보 가져오기 실패:', error);
+        }
+    });
+}
     </script>
 </body>
 </html>

@@ -33,9 +33,9 @@ public class MemberVO  implements UserDetails{
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+    	Collection<GrantedAuthority> authorities = new ArrayList<>();
+    	authorities.add(new SimpleGrantedAuthority(roles.toString()));
+    	return authorities;
     }
 
     @Override

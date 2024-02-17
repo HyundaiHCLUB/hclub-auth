@@ -12,6 +12,9 @@ import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.mapper.MemberMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import java.util.stream.Collectors;
 
@@ -24,14 +27,13 @@ import java.util.stream.Collectors;
  *    김은솔        최초생성
  * ===========================
  */
-@Service
 @Log4j
+@Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-	@Autowired
-    private PasswordEncoder passwordEncoder;
-	@Autowired
-    private MemberMapper memberMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final MemberMapper memberMapper;
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
@@ -45,7 +47,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private UserDetails createUserDetails(MemberVO member) {
-        log.info(member.toString());
         return User.builder()
                 .username(member.getUsername())
                 .password(passwordEncoder.encode(member.getPassword()))
@@ -53,11 +54,5 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .build();
     }
 
-    public UserDetails memberToUserDetails(MemberVO member) {
-        return User.builder()
-                .username(member.getUsername())
-                .password(passwordEncoder.encode(member.getPassword()))
-                .roles(member.getRoles().toArray(new String[0]))
-                .build();
-    }
+
 }

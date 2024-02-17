@@ -1,10 +1,8 @@
 package site.hclub.hyndai.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,20 +10,25 @@ import org.springframework.web.servlet.ModelAndView;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import site.hclub.hyndai.common.response.ApiResponse;
-import site.hclub.hyndai.common.response.SuccessType;
 import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
 import site.hclub.hyndai.dto.SignInDto;
 import site.hclub.hyndai.service.JwtTokenProvider;
 import site.hclub.hyndai.service.MemberService;
+
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import static site.hclub.hyndai.common.response.SuccessType.*;
 
 /**
@@ -48,19 +51,22 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<JwtToken> signIn(@RequestBody SignInDto signInDto) {
-        //  ResponseEntity<ApiResponse<Club>>
-    	 //  ResponseEntity<ApiResponse<Club>> 
+     
         String userId = signInDto.getUsername();
         String password = signInDto.getPassword();
-        log.info("signInDto: "+signInDto.toString());
+      
         JwtToken jwtToken = memberService.signIn(userId, password);
         
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("Authorization", "Bearer " + jwtToken.getAccessToken());
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        log.info("httpHeaders = {}", httpHeaders);
-        //    return ApiResponse.success(SuccessType.CREATE_CLUB_SUCCESS, clubService.save(image, request));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+       Object principal = SecurityContextHolder.getContext();
+      // Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
+       // UserDetails userDetails = (UserDetails)principal; 
+    
+        
         return ResponseEntity.ok()
                 .headers(httpHeaders)
                 .body(jwtToken);
@@ -97,5 +103,12 @@ public class MemberController {
         response.put("isEmployee", isEmployee);
         
         return ApiResponse.success(GET_EMPLOYEE_YN_SUCCESS, response);
+    }
+    @PostMapping("/test")
+    public ResponseEntity<Map<String, Object>> test(Principal principal , HttpServletRequest authorizationHeader){
+    	Map<String, Object> map =new HashMap<>();
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      //   Object principal = SecurityContextHolder.getContext();
+    	 return ResponseEntity.ok(map);
     }
 }
