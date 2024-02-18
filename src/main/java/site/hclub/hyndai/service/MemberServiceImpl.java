@@ -13,9 +13,11 @@ import org.springframework.util.StringUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import site.hclub.hyndai.domain.Employee;
 import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
+import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.mapper.MemberMapper;
 import site.hclub.hyndai.mapper.TokenMapper;
 
@@ -113,5 +115,22 @@ public class MemberServiceImpl implements MemberService{
 	public int insertMemberInfo(MemberVO mvo) {
 		
 		return memberMapper.insertMemberInfo(mvo);
+	}
+
+	@Override
+	public MyPageInfoResponse getMypageUserInfo(String memberId) {
+		MyPageInfoResponse respose = new MyPageInfoResponse();
+		MemberVO vo = memberMapper.getMemberInfo(memberId);
+		respose.setMember_id(vo.getMemberId());
+		respose.setMemberImage(vo.getMemberImage());
+		respose.setMemberInterest(vo.getMemberInterest());
+		respose.setMemberRating(vo.getMemberRating());
+
+		Employee emp = memberMapper.getEmployeeInfo(vo.getEmployeeNo());
+		respose.setEmployeeName(emp.getEmployeeName());
+		respose.setEmployeeDept(emp.getEmployeeDept());
+		respose.setEmployeePosition(emp.getEmployeePosition());
+
+		return respose;
 	}
 }

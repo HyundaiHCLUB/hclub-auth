@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
+import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 
 public interface MemberService {
 	
@@ -43,4 +44,7 @@ public interface MemberService {
 	  처리 내용: 회원 정보를 바탕으로 Member테이블에 삽입한다.
 	*/
 	int insertMemberInfo(MemberVO mvo);
+
+	/* 마이페이지 - 기본 인적사항*/
+	MyPageInfoResponse getMypageUserInfo(String memberId);
 }

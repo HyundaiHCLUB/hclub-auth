@@ -1,10 +1,7 @@
 package site.hclub.hyndai.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
@@ -14,6 +11,8 @@ import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
 import site.hclub.hyndai.dto.SignInDto;
+import site.hclub.hyndai.dto.response.MyPageInfoResponse;
+import site.hclub.hyndai.dto.response.MypageClubResponse;
 import site.hclub.hyndai.service.JwtTokenProvider;
 import site.hclub.hyndai.service.MemberService;
 
@@ -111,4 +110,40 @@ public class MemberController {
       //   Object principal = SecurityContextHolder.getContext();
     	 return ResponseEntity.ok(map);
     }
+
+    /* 마이페이지 */
+    /**
+     *  마이페이지 - 기본 인적사항
+     */
+    @GetMapping("/mypage/info/{member_id}")
+    public ResponseEntity<MyPageInfoResponse> getMypageUserInfo(@PathVariable("member_id")String memberId){
+        log.info("mypage (userInfo) ==>");
+        MyPageInfoResponse response = new MyPageInfoResponse();
+        try{
+            response = memberService.getMypageUserInfo(memberId);
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /***
+     *  마이페이지 - 내가 속한 동아리
+     */
+//    @GetMapping("/mypage/club/{member_id}")
+//    public ResponseEntity<MypageClubResponse> getMypageClubInfo(@PathVariable("member_id") String memberId){
+//
+//
+//    }
+
+    /***
+     *  마이페이지 - 매치 히스토리
+     */
+//
+//    @GetMapping("/mypage/comp/{member_id}")
+//    public ResponseEntity<> getMypageCompInfo(@PathVariable("member_id") String memberId){
+//
+//    }
+
+
 }

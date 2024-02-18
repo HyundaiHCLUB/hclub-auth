@@ -1,5 +1,6 @@
 package site.hclub.hyndai.mapper;
 
+import site.hclub.hyndai.domain.Employee;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
 
@@ -36,5 +37,7 @@ public interface MemberMapper {
 	 처리 내용: 멤버정보를 바탕으로 회원가입한다.
 	*/
 	int insertMemberInfo(MemberVO mvo);
-	
+
+	/* input : 사원번호 -> output: employee */
+    Employee getEmployeeInfo(String employeeNo);
 }

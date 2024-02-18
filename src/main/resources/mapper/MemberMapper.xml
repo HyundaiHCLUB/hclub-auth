@@ -42,4 +42,12 @@
 	 ( #{memberId}, #{memberInterest}, #{employeeNo}, #{memberPw}, #{adminYn}) 
      </insert>
 
+	<select id="getEmployeeInfo" resultType="site.hclub.hyndai.domain.Employee">
+		SELECT	employee_no 	AS	employeeNo
+				,employee_dept 	AS	employeeDept
+				,employee_position AS employeePosition
+				,employee_name	AS	employeeName
+		FROM	employee
+		WHERE	employee_no = #{employeeNo}
+	</select>
 </mapper>
