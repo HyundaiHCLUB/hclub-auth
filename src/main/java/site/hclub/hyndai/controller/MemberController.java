@@ -11,6 +11,7 @@ import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
 import site.hclub.hyndai.dto.SignInDto;
+import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
 import site.hclub.hyndai.service.JwtTokenProvider;
@@ -24,9 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import static site.hclub.hyndai.common.response.SuccessType.*;
 
@@ -153,5 +152,19 @@ public class MemberController {
 //
 //    }
 
+    /**
+     *  마이페이지 - 회원정보 수정(비밀번호 only)
+     */
+    @PostMapping(value = "/mypage",
+                 consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateUserInfo(@RequestBody UpdateMemberInfoRequest request) {
+
+        try{
+            memberService.updateMemberInfo(request);
+        }catch (Exception e){
+            return new ResponseEntity<>("failed", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
 
 }

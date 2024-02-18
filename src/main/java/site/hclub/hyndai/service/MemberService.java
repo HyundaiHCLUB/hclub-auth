@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
+import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
 
@@ -50,4 +51,6 @@ public interface MemberService {
 	MyPageInfoResponse getMypageUserInfo(String memberId);
 
 	MypageClubResponse getMypageClubInfo(String memberId);
+
+	void updateMemberInfo(UpdateMemberInfoRequest request);
 }
