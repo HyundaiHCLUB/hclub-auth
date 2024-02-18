@@ -3,6 +3,7 @@ package site.hclub.hyndai.mapper;
 import site.hclub.hyndai.domain.Employee;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
+import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
 
 /**
@@ -43,4 +44,6 @@ public interface MemberMapper {
     Employee getEmployeeInfo(String employeeNo);
 
 	MypageClubResponse getMypageClubInfo(String memberId);
+
+	void updateUserPw(UpdateMemberInfoRequest request);
 }

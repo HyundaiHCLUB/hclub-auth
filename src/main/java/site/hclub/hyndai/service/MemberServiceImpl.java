@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -17,6 +16,7 @@ import site.hclub.hyndai.domain.Employee;
 import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
+import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
 import site.hclub.hyndai.mapper.MemberMapper;
@@ -139,5 +139,10 @@ public class MemberServiceImpl implements MemberService{
 	public MypageClubResponse getMypageClubInfo(String memberId) {
 		MypageClubResponse response = memberMapper.getMypageClubInfo(memberId);
 		return response;
+	}
+
+	@Override
+	public void updateMemberInfo(UpdateMemberInfoRequest request) {
+		memberMapper.updateUserPw(request);
 	}
 }

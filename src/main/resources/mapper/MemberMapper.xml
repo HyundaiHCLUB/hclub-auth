@@ -66,4 +66,10 @@
 		ON 		ctg.category_id = c.category_id
 		WHERE 	m.member_id = #{memberId}
 	</select>
+
+	<update id="updateUserPw" parameterType="site.hclub.hyndai.dto.request.UpdateMemberInfoRequest">
+		UPDATE	member
+		SET		member_pw = #{memberPw}
+		WHERE	member_id = #{memberId}
+	</update>
 </mapper>
