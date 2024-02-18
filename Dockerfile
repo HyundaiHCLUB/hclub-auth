@@ -9,7 +9,7 @@ COPY pom.xml /home/app
 WORKDIR /home/app
 
 # WAR 파일로 빌드 하면서 테스트 스킵
-RUN mvn -e clean package -DskipTests
+RUN mvn -X clean package -DskipTests
 
 
 FROM tomcat:9.0-jdk11-openjdk
