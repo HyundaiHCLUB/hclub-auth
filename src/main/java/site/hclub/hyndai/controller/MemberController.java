@@ -121,6 +121,7 @@ public class MemberController {
         MyPageInfoResponse response = new MyPageInfoResponse();
         try{
             response = memberService.getMypageUserInfo(memberId);
+            log.info(response.toString());
         }catch (Exception e){
             log.error(e.getMessage());
         }
@@ -130,11 +131,18 @@ public class MemberController {
     /***
      *  마이페이지 - 내가 속한 동아리
      */
-//    @GetMapping("/mypage/club/{member_id}")
-//    public ResponseEntity<MypageClubResponse> getMypageClubInfo(@PathVariable("member_id") String memberId){
-//
-//
-//    }
+    @GetMapping("/mypage/club/{member_id}")
+    public ResponseEntity<MypageClubResponse> getMypageClubInfo(@PathVariable("member_id") String memberId){
+        MypageClubResponse response = new MypageClubResponse();
+        try{
+            response = memberService.getMypageClubInfo(memberId);
+            log.info(response.toString());
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
     /***
      *  마이페이지 - 매치 히스토리

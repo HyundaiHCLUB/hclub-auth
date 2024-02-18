@@ -13,5 +13,5 @@ public class MypageClubResponse {
     private String  clubImage;
     private String  clubInfo;
     private String  clubLoc;
-    private Long    categoryId;
+    private String  categoryName;
 }

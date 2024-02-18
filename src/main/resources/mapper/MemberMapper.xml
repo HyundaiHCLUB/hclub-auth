@@ -50,4 +50,20 @@
 		FROM	employee
 		WHERE	employee_no = #{employeeNo}
 	</select>
+
+	<select id="getMypageClubInfo" resultType="site.hclub.hyndai.dto.response.MypageClubResponse">
+		SELECT 	c.club_name		AS	clubName
+				,c.club_image	AS	clubImage
+				,c.club_info	AS	clubInfo
+				,c.club_loc		AS	clubLoc
+				,ctg.category_name	AS categoryName
+		FROM 	club c
+		JOIN	member_club mc
+		ON		c.club_no = mc.club_no
+		JOIN	member m
+		ON		mc.member_no = m.member_no
+		JOIN 	category ctg
+		ON 		ctg.category_id = c.category_id
+		WHERE 	m.member_id = #{memberId}
+	</select>
 </mapper>

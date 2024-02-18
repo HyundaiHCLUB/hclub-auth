@@ -6,6 +6,7 @@ import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
+import site.hclub.hyndai.dto.response.MypageClubResponse;
 
 public interface MemberService {
 	
@@ -47,4 +48,6 @@ public interface MemberService {
 
 	/* 마이페이지 - 기본 인적사항*/
 	MyPageInfoResponse getMypageUserInfo(String memberId);
+
+	MypageClubResponse getMypageClubInfo(String memberId);
 }

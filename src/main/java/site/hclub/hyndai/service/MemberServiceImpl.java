@@ -18,6 +18,7 @@ import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
+import site.hclub.hyndai.dto.response.MypageClubResponse;
 import site.hclub.hyndai.mapper.MemberMapper;
 import site.hclub.hyndai.mapper.TokenMapper;
 
@@ -132,5 +133,11 @@ public class MemberServiceImpl implements MemberService{
 		respose.setEmployeePosition(emp.getEmployeePosition());
 
 		return respose;
+	}
+
+	@Override
+	public MypageClubResponse getMypageClubInfo(String memberId) {
+		MypageClubResponse response = memberMapper.getMypageClubInfo(memberId);
+		return response;
 	}
 }

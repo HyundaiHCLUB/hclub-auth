@@ -3,6 +3,7 @@ package site.hclub.hyndai.mapper;
 import site.hclub.hyndai.domain.Employee;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
+import site.hclub.hyndai.dto.response.MypageClubResponse;
 
 /**
  * @author 김은솔
@@ -40,4 +41,6 @@ public interface MemberMapper {
 
 	/* input : 사원번호 -> output: employee */
     Employee getEmployeeInfo(String employeeNo);
+
+	MypageClubResponse getMypageClubInfo(String memberId);
 }
