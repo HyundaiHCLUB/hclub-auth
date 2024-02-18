@@ -20,15 +20,41 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class MemberVO  implements UserDetails{
+	/**
+     멤버 번호 
+    */
     private Long memberNo;
+    /**
+     멤버 아이디
+    */
     private String memberId;
+    /**
+     멤버 사진
+    */
     private String memberImage;
+    /**
+     관심사
+    */
     private String memberInterest;
+    /**
+     레이팅
+    */
     private Long memberRating ;
+    /**
+     사원 번호
+    */
     private String employeeNo;
+    /**
+     회원 비밀번호
+    */
     private String memberPw;
+    /**
+     관리자여부
+     */
     private String adminYn ;
-
+    /**
+     권한 role
+    */
     private List<String> roles = new ArrayList<>();
     
     @Override
