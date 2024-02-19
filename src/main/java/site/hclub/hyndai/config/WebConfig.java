@@ -1,12 +1,10 @@
 package site.hclub.hyndai.config;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import site.hclub.hyndai.service.JwtAuthenticationFilter;
-import site.hclub.hyndai.service.JwtTokenProvider;
+
 
 import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
@@ -15,13 +13,11 @@ import javax.servlet.ServletRegistration;
 @Configuration
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-   @Autowired
-   private JwtTokenProvider jwtTokenProvider;
-
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[]{
-                DataConfig.class
+                DataConfig.class,
+                AuthenticationConfig.class
         };
     }
 
@@ -30,7 +26,8 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         return new Class[]{
                 ServletContextConfig.class,
                 CorsConfig.class,
-                SecurityConfig.class
+        
+                // SecurityConfig.class
         };
     }
 
@@ -45,11 +42,11 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
 
-        JwtAuthenticationFilter jwtAuthenticationFilter= new JwtAuthenticationFilter(jwtTokenProvider);
+     
         return new Filter[]{
                 characterEncodingFilter,
-               // jwtAuthenticationFilter
-             
+       
+       
         };
     }
 

@@ -42,8 +42,6 @@ public class MemberServiceImpl implements MemberService{
 	
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     
-    private final JwtTokenProvider jwtTokenProvider;
-    
     @Autowired
     private TokenMapper tokenMapper;
     
@@ -55,17 +53,17 @@ public class MemberServiceImpl implements MemberService{
     public JwtToken signIn(String userId, String password) {
     	
         // 1. userId + password 를 기반으로 Authentication 객체 생성
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, password);
+  //      UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, password);
         
         // 2. 실제 검증. authenticate() 메서드를 통해 요청된 Member 에 대한 검증 진행 =>  CustomUserDetailsService 에서 만든 loadUserByUsername 메서드 실행
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         // SecurityContextHolder.getContext().setAuthentication(authentication);
        
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
-        
+       // JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
+    	JwtToken jwtToken = new JwtToken ();
         // 4. 생성된 JWT토큰 정보를 jwt관련 테이블로 insert 
-        insertTokenInfo(jwtToken, userId);
+       // insertTokenInfo(jwtToken, userId);
 
         return jwtToken;
     }
@@ -98,11 +96,12 @@ public class MemberServiceImpl implements MemberService{
 		String accessToken = resolveToken(request);
 		
 		//accessToken을 통해 권한을 가져옴.
-		Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+		//Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 		
-		String userId = authentication.getName();
+		// String userId = authentication.getName();
 		
-		return memberMapper.getMemberInfo(userId);
+		//return memberMapper.getMemberInfo(userId);
+		return memberMapper.getMemberInfo("");
 	}
 	
 	@Override

@@ -14,9 +14,7 @@ import site.hclub.hyndai.dto.SignInDto;
 import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
-import site.hclub.hyndai.service.JwtTokenProvider;
 import site.hclub.hyndai.service.MemberService;
-
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,8 +43,7 @@ import static site.hclub.hyndai.common.response.SuccessType.*;
 public class MemberController {
 
     private final MemberService memberService;
-    private final JwtTokenProvider jwtTokenProvider;
-
+   
     @PostMapping("/login")
     public ResponseEntity<JwtToken> signIn(@RequestBody SignInDto signInDto) {
      
