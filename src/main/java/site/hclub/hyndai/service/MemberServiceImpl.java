@@ -19,8 +19,11 @@ import site.hclub.hyndai.dto.EmployeeDTO;
 import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
+import site.hclub.hyndai.dto.response.MypageMatchHistoryResponse;
 import site.hclub.hyndai.mapper.MemberMapper;
 import site.hclub.hyndai.mapper.TokenMapper;
+
+import java.util.List;
 
 /**
  * @author 김은솔
@@ -144,5 +147,14 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public void updateMemberInfo(UpdateMemberInfoRequest request) {
 		memberMapper.updateUserPw(request);
+	}
+
+	@Override
+	public List<MypageMatchHistoryResponse> getMypageMatchHistory(String memberId) {
+		List<MypageMatchHistoryResponse> response = memberMapper.getMypageMatchHistory(memberId);
+		log.info("=== Service ===");
+		log.info("input(Service) : " + memberId);
+		log.info("response -> " + response.toString());
+		return response;
 	}
 }
