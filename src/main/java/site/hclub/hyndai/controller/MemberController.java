@@ -14,13 +14,11 @@ import site.hclub.hyndai.dto.SignInDto;
 import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
-import site.hclub.hyndai.dto.response.MypageMatchHistoryResponse;
 import site.hclub.hyndai.service.JwtTokenProvider;
 import site.hclub.hyndai.service.MemberService;
 
 import java.security.Principal;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
@@ -77,6 +75,18 @@ public class MemberController {
        
        return ApiResponse.success(GET_MEMBER_DETAIL_SUCCESS, memberService.accessMemberInfo(authorizationHeader));
     }
+    /**
+     JWT 토큰을 이용한 로그인 
+     */
+    @PostMapping("/member/baseInfo")
+    public ResponseEntity<ApiResponse<MemberVO>> baseInfo(HttpServletRequest authorizationHeader) {
+       
+    	String accessToken = memberService.resolveToken(authorizationHeader);
+    	log.info("By Token AccessToken: "+accessToken);
+    	
+       return ApiResponse.success(GET_MEMBER_DETAIL_SUCCESS,  memberService.getMemberInfoToken(accessToken));
+    }
+
 
     @GetMapping("/loginView")
     public ModelAndView loginView() {
@@ -148,24 +158,11 @@ public class MemberController {
     /***
      *  마이페이지 - 매치 히스토리
      */
-    @GetMapping(value = "/mypage/comp/{memberId}")
-    public ResponseEntity<List<MypageMatchHistoryResponse>> getMypageCompInfo(@PathVariable("memberId") String memberId){
-        List<MypageMatchHistoryResponse> response;
-        log.info("input(Controller) : " + memberId);
-        try{
-            response = memberService.getMypageMatchHistory(memberId);
-            if (response != null) {
-                log.info("response -> " + response.toString());
-            } else {
-                log.warn("No match history found for member_id: " + memberId);
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//
+//    @GetMapping("/mypage/comp/{member_id}")
+//    public ResponseEntity<> getMypageCompInfo(@PathVariable("member_id") String memberId){
+//
+//    }
 
     /**
      *  마이페이지 - 회원정보 수정(비밀번호 only)

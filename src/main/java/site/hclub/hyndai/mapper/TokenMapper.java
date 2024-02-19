@@ -5,4 +5,6 @@ import site.hclub.hyndai.domain.JwtToken;
 public interface TokenMapper {
 
 	int insertTokenMemberInfo(JwtToken jwtToken);
+	
+	JwtToken selectTokenMemberInfo(String accessToken);
 }

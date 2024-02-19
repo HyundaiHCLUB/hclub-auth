@@ -26,6 +26,8 @@ public interface MemberMapper {
 	*/
 	MemberVO getMemberInfo(String userId);
 	
+	MemberVO getMemberInfoByVo(MemberVO mvo);
+	
 	/**
 	 작성자: 김은솔 
 	 처리 내용: 멤버 아이디를 기준으로 해당 아이디가 존재하는지를 조회한다.

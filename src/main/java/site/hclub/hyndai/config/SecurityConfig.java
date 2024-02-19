@@ -47,7 +47,6 @@ public class SecurityConfig{
     
     @Bean
     public static PasswordEncoder passwordEncoder() {
-        // BCrypt Encoder 사용
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }

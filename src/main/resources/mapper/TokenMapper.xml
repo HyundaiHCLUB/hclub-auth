@@ -10,5 +10,13 @@
     	(MEMBER_NO, ACCESS_TOKEN , REFRESH_TOKEN)
 	VALUES(#{memberNo},#{accessToken}, #{refreshToken})
   </insert>
+  <select id="selectTokenMemberInfo" resultType="site.hclub.hyndai.domain.JwtToken" parameterType="String">
+  	SELECT
+	    TOKEN_ID AS TOKEN_ID
+	    , MEMBER_NO AS memberNo
+	    , ACCESS_TOKEN AS accessToken
+	FROM TOKEN
+	WHERE ACCESS_TOKEN = #{accessToken}
+  </select>
 
 </mapper>

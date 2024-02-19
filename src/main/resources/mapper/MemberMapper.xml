@@ -19,6 +19,21 @@
 			where
 		member_id = #{memberId}
     </select>
+    <select id="getMemberInfoByVo" resultType="site.hclub.hyndai.domain.MemberVO" parameterType="site.hclub.hyndai.domain.MemberVO">
+    select 
+		    member_no as memberNo
+		    , member_id as memberId
+		    , member_image as memberImage
+		    , member_interest as memberInterest
+		    , member_rating as memberRating
+		    , employee_no as employeeNo
+		    , member_pw as memberPw
+		    , admin_yn as adminYn
+		from member
+			where
+		member_no = #{memberNo}
+    
+    </select>
     <select id="getMemberIdYn" parameterType="String" resultType="int">
     	select
     		count(*)

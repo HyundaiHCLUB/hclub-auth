@@ -48,7 +48,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         JwtAuthenticationFilter jwtAuthenticationFilter= new JwtAuthenticationFilter(jwtTokenProvider);
         return new Filter[]{
                 characterEncodingFilter,
-                jwtAuthenticationFilter
+               // jwtAuthenticationFilter
              
         };
     }

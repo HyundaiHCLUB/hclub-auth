@@ -99,7 +99,8 @@ $(document).ready(function() {
             success: function(response) {
                 console.log('로그인 성공! 토큰:', response);
                 //getUserInfo(response.accessToken); // accessToken으로 변경
-                getUserInfo2(response.accessToken);
+                // getUserInfo2(response.accessToken);
+                getUserInfo3(response.accessToken);
             },
             error: function(xhr, status, error) {
                 console.error('로그인 실패:', error);
@@ -133,6 +134,22 @@ function getUserInfo2(accessToken) { // refreshToken이 아닌 accessToken으로
         },
         success: function(memberInfo) {
             console.log('사용자 정보:', memberInfo);
+        },
+        error: function(xhr, status, error) {
+            console.error('사용자 정보 가져오기 실패:', error);
+        }
+    });
+}
+
+function getUserInfo3(accessToken) { // refreshToken이 아닌 accessToken으로 변경
+    $.ajax({
+        type: 'POST',
+        url: '/auth/member/baseInfo',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken // accessToken 사용
+        },
+        success: function(memberInfo) {
+            console.log('사용자 정보 By Token:', memberInfo);
         },
         error: function(xhr, status, error) {
             console.error('사용자 정보 가져오기 실패:', error);

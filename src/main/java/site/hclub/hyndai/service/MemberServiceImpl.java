@@ -45,7 +45,7 @@ public class MemberServiceImpl implements MemberService{
     private final JwtTokenProvider jwtTokenProvider;
     
     @Autowired
-    private TokenMapper TokenMapper;
+    private TokenMapper tokenMapper;
     
     @Autowired
     private MemberMapper memberMapper;
@@ -65,7 +65,7 @@ public class MemberServiceImpl implements MemberService{
         JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
         
         // 4. 생성된 JWT토큰 정보를 jwt관련 테이블로 insert 
-        //insertTokenInfo(jwtToken, userId);
+        insertTokenInfo(jwtToken, userId);
 
         return jwtToken;
     }
@@ -76,7 +76,7 @@ public class MemberServiceImpl implements MemberService{
 		MemberVO mvo = memberMapper.getMemberInfo(userId);
 		jwtToken.setMemberNo(mvo.getMemberNo());
 		
-		return TokenMapper.insertTokenMemberInfo(jwtToken);
+		return tokenMapper.insertTokenMemberInfo(jwtToken);
 	}
 
 	@Override
@@ -156,5 +156,17 @@ public class MemberServiceImpl implements MemberService{
 		log.info("input(Service) : " + memberId);
 		log.info("response -> " + response.toString());
 		return response;
+	}
+
+	@Override
+	public MemberVO getMemberInfoToken(String accessToken) {
+		
+	  JwtToken jwt  = tokenMapper.selectTokenMemberInfo(accessToken);
+	  Long memberNo = jwt.getMemberNo();
+	  
+	  MemberVO param = new MemberVO();
+	  param.setMemberNo(memberNo);
+	  
+	  return memberMapper.getMemberInfoByVo(param);
 	}
 }

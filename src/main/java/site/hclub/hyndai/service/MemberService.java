@@ -58,4 +58,9 @@ public interface MemberService {
 	void updateMemberInfo(UpdateMemberInfoRequest request);
 
 	List<MypageMatchHistoryResponse> getMypageMatchHistory(String memberId);
+	/**
+	  작성자: 김은솔 
+	  처리 내용: JWT TOKEN을 기반으로 Member정보를 조회한다.
+	*/
+	MemberVO getMemberInfoToken(String accessToken);
 }
