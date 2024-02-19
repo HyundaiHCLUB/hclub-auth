@@ -5,6 +5,9 @@ import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
 import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
+import site.hclub.hyndai.dto.response.MypageMatchHistoryResponse;
+
+import java.util.List;
 
 /**
  * @author 김은솔
@@ -46,4 +49,6 @@ public interface MemberMapper {
 	MypageClubResponse getMypageClubInfo(String memberId);
 
 	void updateUserPw(UpdateMemberInfoRequest request);
+
+	List<MypageMatchHistoryResponse> getMypageMatchHistory(String memberId);
 }

@@ -72,4 +72,26 @@
 		SET		member_pw = #{memberPw}
 		WHERE	member_id = #{memberId}
 	</update>
+
+	<select id="getMypageMatchHistory" parameterType="String" resultType="site.hclub.hyndai.dto.response.MypageMatchHistoryResponse">
+		SELECT  t.team_no		AS	teamNo
+			 ,t.match_type		AS	matchType
+			 ,t.team_rating		AS	teamRating
+			 ,t.team_name		AS	teamName
+			 ,m.match_loc		AS	matchLoc
+		     ,m.match_date		AS	matchDate
+			 ,(SELECT score_amount FROM SCORE WHERE score_no = m.win_team_score_no) AS score1
+			 ,(SELECT score_amount FROM score WHERE score_no = m.lose_team_score_no) AS score2
+		FROM    member mb
+		JOIN    member_team mt
+		ON      mb.member_no = mt.member_no
+		JOIN    team t
+		ON      mt.team_no = t.team_no
+		JOIN    score s
+		ON      s.team_no = t.team_no
+		JOIN    match m
+		ON      s.score_no = m.win_team_score_no
+		AND     s.score_no = m.lose_team_score_no
+		WHERE   mb.member_id = #{memberId}
+	</select>
 </mapper>

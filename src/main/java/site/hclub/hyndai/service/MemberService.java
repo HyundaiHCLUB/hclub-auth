@@ -8,6 +8,9 @@ import site.hclub.hyndai.dto.EmployeeDTO;
 import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
+import site.hclub.hyndai.dto.response.MypageMatchHistoryResponse;
+
+import java.util.List;
 
 public interface MemberService {
 	
@@ -53,4 +56,6 @@ public interface MemberService {
 	MypageClubResponse getMypageClubInfo(String memberId);
 
 	void updateMemberInfo(UpdateMemberInfoRequest request);
+
+	List<MypageMatchHistoryResponse> getMypageMatchHistory(String memberId);
 }
