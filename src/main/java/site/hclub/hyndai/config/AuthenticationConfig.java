@@ -45,8 +45,9 @@ public class AuthenticationConfig {
 				.cors()
 				.and()
 				.authorizeRequests()
-				.antMatchers("/api/v1/users/login").permitAll()//join, login은 언제나 가능
-				.antMatchers("/api/v1/users/login2").permitAll()
+				.antMatchers("/auth/login").permitAll()
+				//.antMatchers("/api/v1/users/login").permitAll()//join, login은 언제나 가능
+				//.antMatchers("/api/v1/users/login2").permitAll()
 				.antMatchers(HttpMethod.POST,"/api/v1/reviews").authenticated()
 				.and()
 				.sessionManagement()

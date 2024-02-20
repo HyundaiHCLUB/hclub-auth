@@ -15,6 +15,8 @@ import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
 import site.hclub.hyndai.service.MemberService;
+import site.hclub.hyndai.service.UserService;
+
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,47 +45,23 @@ import static site.hclub.hyndai.common.response.SuccessType.*;
 public class MemberController {
 
     private final MemberService memberService;
+	private final UserService userService;
    
     @PostMapping("/login")
     public ResponseEntity<JwtToken> signIn(@RequestBody SignInDto signInDto) {
      
-        String userId = signInDto.getUsername();
-        String password = signInDto.getPassword();
-      
-        JwtToken jwtToken = memberService.signIn(userId, password);
-        
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("Authorization", "Bearer " + jwtToken.getAccessToken());
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-       Object principal = SecurityContextHolder.getContext();
-      // Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
-       // UserDetails userDetails = (UserDetails)principal; 
-    
-        
-        return ResponseEntity.ok()
-                .headers(httpHeaders)
-                .body(jwtToken);
+    	String userId = signInDto.getUsername();
+	     String password = signInDto.getPassword();
+	     
+		 JwtToken jwtToken = userService.signIn(userId, password);
+		 HttpHeaders httpHeaders = new HttpHeaders();
+	     httpHeaders.set("Authorization", "Bearer " + jwtToken.getAccessToken());
+	     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+		 
+	     return ResponseEntity.ok()
+	                .headers(httpHeaders)
+	                .body(jwtToken);
     }
-
-    @PostMapping("/member/info")
-    public ResponseEntity<ApiResponse<MemberVO>> accessMemberInfo(HttpServletRequest authorizationHeader) {
-       
-       return ApiResponse.success(GET_MEMBER_DETAIL_SUCCESS, memberService.accessMemberInfo(authorizationHeader));
-    }
-    /**
-     JWT 토큰을 이용한 로그인 
-     */
-    @PostMapping("/member/baseInfo")
-    public ResponseEntity<ApiResponse<MemberVO>> baseInfo(HttpServletRequest authorizationHeader) {
-       
-    	String accessToken = memberService.resolveToken(authorizationHeader);
-    	log.info("By Token AccessToken: "+accessToken);
-    	
-       return ApiResponse.success(GET_MEMBER_DETAIL_SUCCESS,  memberService.getMemberInfoToken(accessToken));
-    }
-
 
     @GetMapping("/loginView")
     public ModelAndView loginView() {
@@ -100,7 +78,6 @@ public class MemberController {
     	
     	return ApiResponse.success(INSERT_MEMBER_INFO_SUCCESS);
     }
-    
 
     @PostMapping("/getEmployeeYn")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getEmployeeYn(@RequestBody EmployeeDTO dto) {
@@ -114,8 +91,9 @@ public class MemberController {
     @PostMapping("/test")
     public ResponseEntity<Map<String, Object>> test(Principal principal , HttpServletRequest authorizationHeader){
     	Map<String, Object> map =new HashMap<>();
-    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      //   Object principal = SecurityContextHolder.getContext();
+ 
+    	String userId =  principal.getName();
+       	log.info( "test getId: "+ userId);
     	 return ResponseEntity.ok(map);
     }
 

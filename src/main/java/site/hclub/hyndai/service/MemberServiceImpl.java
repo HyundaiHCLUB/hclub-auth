@@ -48,26 +48,6 @@ public class MemberServiceImpl implements MemberService{
     @Autowired
     private MemberMapper memberMapper;
 
-    @Transactional
-    @Override
-    public JwtToken signIn(String userId, String password) {
-    	
-        // 1. userId + password 를 기반으로 Authentication 객체 생성
-  //      UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId, password);
-        
-        // 2. 실제 검증. authenticate() 메서드를 통해 요청된 Member 에 대한 검증 진행 =>  CustomUserDetailsService 에서 만든 loadUserByUsername 메서드 실행
-//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        // SecurityContextHolder.getContext().setAuthentication(authentication);
-       
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
-       // JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
-    	JwtToken jwtToken = new JwtToken ();
-        // 4. 생성된 JWT토큰 정보를 jwt관련 테이블로 insert 
-       // insertTokenInfo(jwtToken, userId);
-
-        return jwtToken;
-    }
-
 	@Override
 	public int insertTokenInfo(JwtToken jwtToken, String userId) {
 		
@@ -88,20 +68,6 @@ public class MemberServiceImpl implements MemberService{
 		int cnt = memberMapper.getEmployeeYn(dto);
 		
 		return cnt > 0 ? "Y":"N";
-	}
-
-	@Override
-	public MemberVO accessMemberInfo(HttpServletRequest request) {
-		
-		String accessToken = resolveToken(request);
-		
-		//accessToken을 통해 권한을 가져옴.
-		//Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-		
-		// String userId = authentication.getName();
-		
-		//return memberMapper.getMemberInfo(userId);
-		return memberMapper.getMemberInfo("");
 	}
 	
 	@Override
@@ -157,15 +123,4 @@ public class MemberServiceImpl implements MemberService{
 		return response;
 	}
 
-	@Override
-	public MemberVO getMemberInfoToken(String accessToken) {
-		
-	  JwtToken jwt  = tokenMapper.selectTokenMemberInfo(accessToken);
-	  Long memberNo = jwt.getMemberNo();
-	  
-	  MemberVO param = new MemberVO();
-	  param.setMemberNo(memberNo);
-	  
-	  return memberMapper.getMemberInfoByVo(param);
-	}
 }

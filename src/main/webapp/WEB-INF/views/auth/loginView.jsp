@@ -99,8 +99,8 @@ $(document).ready(function() {
             success: function(response) {
                 console.log('로그인 성공! 토큰:', response);
                 //getUserInfo(response.accessToken); // accessToken으로 변경
-                // getUserInfo2(response.accessToken);
-                getUserInfo3(response.accessToken);
+                 getUserInfo2(response.accessToken);
+                //getUserInfo3(response.accessToken);
             },
             error: function(xhr, status, error) {
                 console.error('로그인 실패:', error);
