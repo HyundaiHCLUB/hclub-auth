@@ -48,7 +48,7 @@ public class JwtTokenProvider {
     @Autowired
     private CustomUserDetailsService customUserDetailsService ;
     
-    // application.yml에서 secret 값 가져와서 key에 저장한
+   //application.yml에서 secret 값 가져와서 key에 저장한다
    public JwtTokenProvider(@Value("${jwt-secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
@@ -115,7 +115,7 @@ public class JwtTokenProvider {
     }
 
 
-    // accessToken
+    // accessToken에서 권한설정 변경 
     private Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder()
