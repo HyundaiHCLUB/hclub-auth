@@ -97,12 +97,41 @@ public class MemberController {
     	 return ResponseEntity.ok(map);
     }
 
-    /* 마이페이지 */
+
+    /*** 마이페이지 ****/
+
     /**
      *  마이페이지 - 기본 인적사항
+     *  @respnse
+     *  - MyPageInfoResponse : 이름, 부서명, 직급, 아이디, 사진, 흥미, 레이팅
      */
-    @GetMapping("/mypage/info/{member_id}")
-    public ResponseEntity<MyPageInfoResponse> getMypageUserInfo(@PathVariable("member_id")String memberId){
+    @GetMapping("/mypage/info")
+    public ResponseEntity<MyPageInfoResponse> getMypageUserInfo(Principal principal, HttpServletRequest request)
+    {
+        // 1. 헤더에서 멤버아이디 가져오기
+        // "Authorization" 헤더에서 토큰을 추출합니다.
+        String token = request.getHeader("Authorization");
+        log.info("token : " + token);
+        String memberId = "";
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer "을 제거합니다.
+            try {
+                memberId = principal.getName();
+                log.info("get Member ID : " + memberId);
+                // userId를 ResponseEntity에 담아 반환합니다.
+            } catch (Exception e) {
+                // 토큰이 유효하지 않은 경우
+                log.error(e.getMessage());
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Invalid token");
+            }
+        } else {
+            // 헤더에 Bearer 토큰이 없는 경우.
+            log.info("=== token is NULL ===");
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Authorization header is missing or not in Bearer format");
+        }
+        // 2. 해당 유저 정보
         log.info("mypage (userInfo) ==>");
         MyPageInfoResponse response = new MyPageInfoResponse();
         try{
