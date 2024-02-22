@@ -17,7 +17,8 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
     protected Class<?>[] getRootConfigClasses() {
         return new Class[]{
                 DataConfig.class,
-                AuthenticationConfig.class
+                AuthenticationConfig.class,
+                
         };
     }
 
@@ -41,12 +42,12 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
-
+        
+        CorsConfig corsConfig = new CorsConfig();
      
         return new Filter[]{
                 characterEncodingFilter,
-       
-       
+                corsConfig.corsFilter()
         };
     }
 
