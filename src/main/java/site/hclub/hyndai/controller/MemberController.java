@@ -54,6 +54,10 @@ public class MemberController {
 	     String password = signInDto.getPassword();
 	     
 		 JwtToken jwtToken = userService.signIn(userId, password);
+	
+		 //토큰 정보를 삽입한다.
+		 memberService.insertTokenInfo(jwtToken, userId);
+		 
 		 HttpHeaders httpHeaders = new HttpHeaders();
 	     httpHeaders.set("Authorization", "Bearer " + jwtToken.getAccessToken());
 	     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
