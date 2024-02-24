@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
 import site.hclub.hyndai.config.RestTemplateConfig;
+import org.springframework.web.multipart.MultipartFile;
+import site.hclub.hyndai.common.util.AmazonS3Service;
 import site.hclub.hyndai.domain.Employee;
 import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
@@ -33,6 +35,9 @@ import site.hclub.hyndai.mapper.TokenMapper;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 김은솔
@@ -60,6 +65,8 @@ public class MemberServiceImpl implements MemberService{
 	private final ClubMapper clubMapper;
 
 	private final RestTemplate restTemplate;
+
+	private final AmazonS3Service amazonS3Service;
 
 	@Override
 	public int insertTokenInfo(JwtToken jwtToken, String userId) {
@@ -138,6 +145,26 @@ public class MemberServiceImpl implements MemberService{
 		return response;
 	}
 
+	// 마이페이지 - 프로필 사진 수정
+	@Override
+	public String updateProfileImage(MultipartFile multipartFile, String memberId) throws IOException {
+		String url;
+		/* S3 업로드 */
+		String filePath = "profile";
+		List<MultipartFile> multipartFiles = new ArrayList<>();
+		System.out.println("=========== SERVICE =============");
+		System.out.println("ORIGINAL FILE NAME : " + multipartFile.getOriginalFilename());
+		multipartFiles.add(multipartFile);
+		// uploadFiles 메서드를 사용하여 파일 업로드
+		List<String> urls = amazonS3Service.uploadFiles(filePath, multipartFiles);
+		// 반환된 URL 리스트에서 첫 번째 URL을 사용
+		url = urls.get(0);
+		log.info(url);
+		/* DB 에 파일 URL 업로드*/
+		String fileName = multipartFile.getOriginalFilename();
+		memberMapper.updateProfileImage(url, memberId);
+		return url;
+	}
 	@Override
 	public void insertMemberClubInterest(String memberId, String interests) {
 

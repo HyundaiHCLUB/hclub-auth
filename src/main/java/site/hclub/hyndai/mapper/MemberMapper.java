@@ -1,5 +1,6 @@
 package site.hclub.hyndai.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import site.hclub.hyndai.domain.Employee;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
@@ -53,4 +54,6 @@ public interface MemberMapper {
 	void updateUserPw(UpdateMemberInfoRequest request);
 
 	List<MypageMatchHistoryResponse> getMypageMatchHistory(String memberId);
+
+	void updateProfileImage(@Param("url") String url, @Param("memberId") String memberId);
 }

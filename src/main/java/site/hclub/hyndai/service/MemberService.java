@@ -2,6 +2,7 @@ package site.hclub.hyndai.service;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.web.multipart.MultipartFile;
 import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
@@ -10,6 +11,7 @@ import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
 import site.hclub.hyndai.dto.response.MypageMatchHistoryResponse;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface MemberService {
@@ -52,4 +54,5 @@ public interface MemberService {
 
 	void insertMemberClubInterest(String memberId,String interests);
 
+	String updateProfileImage(MultipartFile multipartFile, String memberId) throws IOException;
 }
