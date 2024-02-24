@@ -79,7 +79,8 @@ public class MemberController {
     	Map<String, Object> response = new HashMap<>();
     	
     	memberService.insertMemberInfo(mvo);
-    	
+    	log.info("유저 정보 추가 성공");
+
     	return ApiResponse.success(INSERT_MEMBER_INFO_SUCCESS);
     }
 
