@@ -143,6 +143,7 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public void insertMemberClubInterest(Long memberNo, String interests) {
+		log.info("insertMemberClubInterest" + memberNo+" "+interests);
 		String url = "http://localhost:8000/classify-hobbies";
 		HttpHeaders httpHeaders  = new HttpHeaders();
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -154,7 +155,7 @@ public class MemberServiceImpl implements MemberService{
 		HttpEntity<Map<String,List<String>>> request = new HttpEntity<>(requestBody, httpHeaders);
 
 		HobbiesClassifiedResponse response = restTemplate.postForObject(url,request, HobbiesClassifiedResponse.class);
-		//log.info(response.getHobbies().toString());
+		log.info(response.getHobbies().toString());
 		List<Integer> topInterestList = response.getHobbies();
 
 
