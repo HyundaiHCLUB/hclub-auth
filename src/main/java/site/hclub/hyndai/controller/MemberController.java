@@ -188,10 +188,11 @@ public class MemberController {
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
-    @GetMapping("/aa")
-    public ResponseEntity<String> getTest(String interest) {
+    // 멤버의 관심사를 추가합니다
+    @PostMapping("/interest")
+    public ResponseEntity<String> addInterest(@RequestBody MemberVO mvo) {
 
-        memberService.insertMemberClubInterest(1L,interest);
+        memberService.insertMemberClubInterest(mvo.getMemberId(), mvo.getMemberInterest());
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 

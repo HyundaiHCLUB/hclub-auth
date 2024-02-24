@@ -97,10 +97,7 @@ public class MemberServiceImpl implements MemberService{
 	public void insertMemberInfo(MemberVO mvo) {
 		// 회원가입
 		memberMapper.insertMemberInfo(mvo);
-		log.info("HIIII" + memberMapper.getMemberInfo(mvo.getMemberId()).toString());
-		// 추천 동아리 추가 로직
-		Long memberNo = memberMapper.getMemberInfo(mvo.getMemberId()).getMemberNo();
-		insertMemberClubInterest(memberNo,mvo.getMemberInterest());
+
 
 	}
 
@@ -142,7 +139,12 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void insertMemberClubInterest(Long memberNo, String interests) {
+	public void insertMemberClubInterest(String memberId, String interests) {
+
+		// 추천 동아리 추가 로직
+		Long memberNo = memberMapper.getMemberInfo(memberId).getMemberNo();
+
+
 		log.info("insertMemberClubInterest" + memberNo+" "+interests);
 		String url = "http://localhost:8000/classify-hobbies";
 		HttpHeaders httpHeaders  = new HttpHeaders();
@@ -157,7 +159,8 @@ public class MemberServiceImpl implements MemberService{
 		HobbiesClassifiedResponse response = restTemplate.postForObject(url,request, HobbiesClassifiedResponse.class);
 		log.info(response.getHobbies().toString());
 		List<Integer> topInterestList = response.getHobbies();
-
+		topInterestList.remove(topInterestList.size()-1);
+		log.info(topInterestList.toString());
 
 		List<int[]> indexedNumbers = new ArrayList<>();
 		for (int i = 0; i < topInterestList.size(); i++) {
@@ -167,9 +170,9 @@ public class MemberServiceImpl implements MemberService{
 		// 값에 따라 내림차순, 값이 같으면 인덱스에 따라 오름차순으로 정렬
 		Collections.sort(indexedNumbers, (a, b) -> {
 			if (a[0] != b[0]) {
-				return b[0] - a[0]; // 값에 따른 내림차순 정렬
+				return b[0] - a[0];
 			} else {
-				return a[1] - b[1]; // 인덱스에 따른 오름차순 정렬
+				return a[1] - b[1];
 			}
 		});
 

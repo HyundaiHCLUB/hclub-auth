@@ -50,6 +50,6 @@ public interface MemberService {
 
 	List<MypageMatchHistoryResponse> getMypageMatchHistory(String memberId);
 
-	void insertMemberClubInterest(Long memberNo,String interests);
+	void insertMemberClubInterest(String memberId,String interests);
 
 }
