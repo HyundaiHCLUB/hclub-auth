@@ -2,6 +2,7 @@ package site.hclub.hyndai.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
@@ -14,11 +15,13 @@ import site.hclub.hyndai.dto.SignInDto;
 import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
+import site.hclub.hyndai.dto.response.MypageMatchHistoryResponse;
 import site.hclub.hyndai.service.MemberService;
 import site.hclub.hyndai.service.UserService;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
@@ -101,6 +104,7 @@ public class MemberController {
     /*** 마이페이지 ****/
 
     /**
+     *  @autor 송원선
      *  마이페이지 - 기본 인적사항
      *  @respnse
      *  - MyPageInfoResponse : 이름, 부서명, 직급, 아이디, 사진, 흥미, 레이팅
@@ -162,25 +166,62 @@ public class MemberController {
     /***
      *  마이페이지 - 매치 히스토리
      */
-//
-//    @GetMapping("/mypage/comp/{member_id}")
-//    public ResponseEntity<> getMypageCompInfo(@PathVariable("member_id") String memberId){
-//
-//    }
+    @GetMapping(value = "/mypage/comp/{memberId}")
+    public ResponseEntity<List<MypageMatchHistoryResponse>> getMypageCompInfo(@PathVariable("memberId") String memberId){
+        List<MypageMatchHistoryResponse> response;
+        log.info("input(Controller) : " + memberId);
+        try{
+            response = memberService.getMypageMatchHistory(memberId);
+            if (response != null) {
+                log.info("response -> " + response.toString());
+            } else {
+                log.warn("No match history found for member_id: " + memberId);
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
     /**
-     *  마이페이지 - 회원정보 수정(비밀번호 only)
+     *  마이페이지 - 회원정보 수정
+     *  비밀번호 & 프로필 사진
      */
     @PostMapping(value = "/mypage",
-                 consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updateUserInfo(@RequestBody UpdateMemberInfoRequest request) {
-
+                 consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<String> updateUserInfo(@RequestPart(value = "request") UpdateMemberInfoRequest request,
+                                                 @RequestPart(value = "image") MultipartFile multipartFile)
+    {
         try{
+            log.info("Update User Info ====>");
+            log.info("memberId : " + request.getMemberId());
+            log.info("memberPw : " + request.getMemberPw());
             memberService.updateMemberInfo(request);
         }catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity<>("failed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
+
+    @PostMapping(value = "/mypage/profile",
+                consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> updateUserProfileImage(@RequestPart(value = "image") MultipartFile multipartFile,
+                                                         @RequestPart(value = "memberId") UpdateMemberInfoRequest request
+                                                         )
+    {
+        String result = "";
+        try{
+            log.info("Update User Info ====>");
+            // 2. 프로필 사진 변경
+            result = memberService.updateProfileImage(multipartFile, request.getMemberId()); // url
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("failed", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }

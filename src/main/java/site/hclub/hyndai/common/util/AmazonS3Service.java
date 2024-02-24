@@ -24,7 +24,7 @@ public class AmazonS3Service {
     @Value("${cloud-aws-s3-bucket}")
     private String S3Bucket;
 
-    public List<String> uploadFile(String boardNo, List<MultipartFile> multipartFiles) throws IOException {
+    public List<String> uploadFiles(String boardNo, List<MultipartFile> multipartFiles) throws IOException {
 
         String filePath = boardNo + "/";
         List<String> returnURL = new ArrayList<>();
@@ -47,6 +47,5 @@ public class AmazonS3Service {
 
         return returnURL;
     }
-
 
 }
