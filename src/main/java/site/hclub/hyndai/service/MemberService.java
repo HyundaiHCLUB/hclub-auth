@@ -39,7 +39,7 @@ public interface MemberService {
 	  작성자: 김은솔 
 	  처리 내용: 회원 정보를 바탕으로 Member테이블에 삽입한다.
 	*/
-	int insertMemberInfo(MemberVO mvo);
+	void insertMemberInfo(MemberVO mvo);
 
 	/* 마이페이지 - 기본 인적사항*/
 	MyPageInfoResponse getMypageUserInfo(String memberId);
@@ -49,5 +49,7 @@ public interface MemberService {
 	void updateMemberInfo(UpdateMemberInfoRequest request);
 
 	List<MypageMatchHistoryResponse> getMypageMatchHistory(String memberId);
+
+	void insertMemberClubInterest(Long memberNo,String interests);
 
 }

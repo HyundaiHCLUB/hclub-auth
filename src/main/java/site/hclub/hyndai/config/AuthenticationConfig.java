@@ -6,12 +6,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import site.hclub.hyndai.service.JwtTokenProvider;
 import site.hclub.hyndai.service.UserService;
 
@@ -61,4 +64,16 @@ public class AuthenticationConfig {
 	 public static PasswordEncoder passwordEncoder() {
 	       return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	 }
+	@Bean
+	public WebSecurityCustomizer webSecurityCustomizer(HttpFirewall allowUrlEncodedSlashHttpFirewall) {
+		return (web) -> web.httpFirewall(allowUrlEncodedSlashHttpFirewall);
+	}
+
+	@Bean
+	public HttpFirewall customHttpFirewall() {
+		StrictHttpFirewall firewall = new StrictHttpFirewall();
+		// URL에 이중 슬래시를 허용하도록 설정
+		firewall.setAllowUrlEncodedDoubleSlash(true);
+		return firewall;
+	}
 }

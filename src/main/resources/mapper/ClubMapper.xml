@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site.hclub.hyndai.mapper.ClubMapper">
+
+    <insert id="insertMemberClubInterest">
+        INSERT INTO MEMBER_INTEREST_CLUB
+            ( member_no, club_no )
+        VALUES
+            ( #{memberNo},#{clubNo})
+    </insert>
+    <select id="getClubByCategory" resultType="java.lang.Long">
+        SELECT c.CLUB_NO
+        FROM club c
+                 LEFT JOIN (
+            SELECT CLUB_NO, COUNT(*) AS like_count
+            FROM likes
+            WHERE IS_LIKED = 'Y'
+            GROUP BY CLUB_NO
+        ) lc ON c.CLUB_NO = lc.CLUB_NO
+        WHERE c.USE_YN = 'Y' AND c.CATEGORY_ID = #{categoryId}
+        ORDER BY COALESCE(lc.like_count, 0) DESC, c.CLUB_NO
+            FETCH FIRST 1 ROW ONLY
+
+    </select>
+
+</mapper>

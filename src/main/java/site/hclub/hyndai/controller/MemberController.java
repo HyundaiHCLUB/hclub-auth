@@ -78,7 +78,7 @@ public class MemberController {
     public ResponseEntity<ApiResponse<Void>> accessMemberInfo(@RequestBody MemberVO mvo){
     	Map<String, Object> response = new HashMap<>();
     	
-    	int result = memberService.insertMemberInfo(mvo);
+    	memberService.insertMemberInfo(mvo);
     	
     	return ApiResponse.success(INSERT_MEMBER_INFO_SUCCESS);
     }
@@ -184,6 +184,13 @@ public class MemberController {
         }catch (Exception e){
             return new ResponseEntity<>("failed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
+
+    @GetMapping("/aa")
+    public ResponseEntity<String> getTest(String interest) {
+
+        memberService.insertMemberClubInterest(1L,interest);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
