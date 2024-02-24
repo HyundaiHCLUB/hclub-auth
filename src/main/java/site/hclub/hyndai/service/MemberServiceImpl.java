@@ -177,7 +177,7 @@ public class MemberServiceImpl implements MemberService{
 		});
 
 		List<Integer> interestCategoryList = indexedNumbers.stream()
-				.limit(3)
+				.limit(4)
 				.map(pair -> pair[1]+1)
 				.collect(Collectors.toList());
 
