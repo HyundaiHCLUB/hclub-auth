@@ -97,6 +97,7 @@ public class MemberServiceImpl implements MemberService{
 	public void insertMemberInfo(MemberVO mvo) {
 		// 회원가입
 		memberMapper.insertMemberInfo(mvo);
+		//log.info("HIIII" + memberMapper.getMemberInfo(mvo.getMemberId()).toString());
 		// 추천 동아리 추가 로직
 		Long memberNo = memberMapper.getMemberInfo(mvo.getMemberId()).getMemberNo();
 		insertMemberClubInterest(memberNo,mvo.getMemberInterest());
