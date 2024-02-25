@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site.hclub.hyndai.mapper.MemberMapper">
+
+ 
+    <select id="getMemberInfo" resultType="site.hclub.hyndai.domain.MemberVO" parameterType="String">
+        select 
+		    member_no as memberNo
+		    , member_id as memberId
+		    , member_image as memberImage
+		    , member_interest as memberInterest
+		    , member_rating as memberRating
+		    , employee_no as employeeNo
+		    , member_pw as memberPw
+		    , admin_yn as adminYn
+		from member
+			where
+		member_id = #{memberId}
+    </select>
+    <select id="getMemberInfoByVo" resultType="site.hclub.hyndai.domain.MemberVO" parameterType="site.hclub.hyndai.domain.MemberVO">
+    select 
+		    member_no as memberNo
+		    , member_id as memberId
+		    , member_image as memberImage
+		    , member_interest as memberInterest
+		    , member_rating as memberRating
+		    , employee_no as employeeNo
+		    , member_pw as memberPw
+		    , admin_yn as adminYn
+		from member
+			where
+		member_no = #{memberNo}
+    
+    </select>
+    <select id="getMemberIdYn" parameterType="String" resultType="int">
+    	select
+    		count(*)
+    	from
+    		member
+    	where
+    		member_id = #{memberId}
+    </select>
+     <select id="getEmployeeYn" parameterType="site.hclub.hyndai.dto.EmployeeDTO" resultType="int">
+     	select 
+     		count(*) 
+     	from 
+     		employee
+     	where employee_no = #{employeeNo}
+     	and employee_name = #{employeeName}
+     </select>
+     <insert id="insertMemberInfo" parameterType="site.hclub.hyndai.domain.MemberVO">
+     INSERT INTO member 
+     ( member_id, member_interest,  employee_no, member_pw, admin_yn ) 
+		VALUES
+	 ( #{memberId}, #{memberInterest}, #{employeeNo}, #{memberPw}, #{adminYn}) 
+     </insert>
+
+	<select id="getEmployeeInfo" resultType="site.hclub.hyndai.domain.Employee">
+		SELECT	employee_no 	AS	employeeNo
+				,employee_dept 	AS	employeeDept
+				,employee_position AS employeePosition
+				,employee_name	AS	employeeName
+		FROM	employee
+		WHERE	employee_no = #{employeeNo}
+	</select>
+
+	<select id="getMypageClubInfo" resultType="site.hclub.hyndai.dto.response.MypageClubResponse">
+		SELECT 	c.club_name		AS	clubName
+				,c.club_image	AS	clubImage
+				,c.club_info	AS	clubInfo
+				,c.club_loc		AS	clubLoc
+				,ctg.category_name	AS categoryName
+		FROM 	club c
+		JOIN	member_club mc
+		ON		c.club_no = mc.club_no
+		JOIN	member m
+		ON		mc.member_no = m.member_no
+		JOIN 	category ctg
+		ON 		ctg.category_id = c.category_id
+		WHERE 	m.member_id = #{memberId}
+	</select>
+
+	<update id="updateUserPw" parameterType="site.hclub.hyndai.dto.request.UpdateMemberInfoRequest">
+		UPDATE	member
+		SET		member_pw = #{memberPw}
+		WHERE	member_id = #{memberId}
+	</update>
+
+	<select id="getMypageMatchHistory" parameterType="String" resultType="site.hclub.hyndai.dto.response.MypageMatchHistoryResponse">
+		SELECT  t.team_no		AS	teamNo
+			 ,t.match_type		AS	matchType
+			 ,t.team_rating		AS	teamRating
+			 ,t.team_name		AS	teamName
+			 ,m.match_loc		AS	matchLoc
+		     ,m.match_date		AS	matchDate
+			 ,(SELECT score_amount FROM SCORE WHERE score_no = m.win_team_score_no) AS score1
+			 ,(SELECT score_amount FROM score WHERE score_no = m.lose_team_score_no) AS score2
+		FROM    member mb
+		JOIN    member_team mt
+		ON      mb.member_no = mt.member_no
+		JOIN    team t
+		ON      mt.team_no = t.team_no
+		JOIN    score s
+		ON      s.team_no = t.team_no
+		JOIN    match m
+		ON      s.score_no = m.win_team_score_no
+		AND     s.score_no = m.lose_team_score_no
+		WHERE   mb.member_id = #{memberId}
+	</select>
+
+	<update id="updateProfileImage">
+		UPDATE	member
+		SET		member_image = #{url}
+		WHERE	member_id = #{memberId}
+	</update>
+</mapper>

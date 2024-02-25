@@ -1,9 +1,7 @@
 package site.hclub.hyndai.common.advice;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -13,13 +11,12 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import site.hclub.hyndai.common.response.ApiResponse;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static site.hclub.hyndai.common.advice.CommonExceptionType.*;
 import static site.hclub.hyndai.common.advice.ErrorType.INDEX_OUT_OF_BOUND_ERROR;
@@ -27,7 +24,7 @@ import static site.hclub.hyndai.common.advice.ErrorType.INTERNAL_SERVER_ERROR;
 
 @Slf4j
 @RequiredArgsConstructor
-@RestControllerAdvice
+//@RestControllerAdvice
 public class GlobalExceptionHandler {
     /**
      * 400 Bad Request
@@ -84,7 +81,6 @@ public class GlobalExceptionHandler {
         ErrorResponse ex = ErrorResponse.of(INDEX_OUT_OF_BOUND_ERROR);
         return ResponseEntity.status(ex.getCode().value()).body(ex);
     }
-
 
 
     /**
