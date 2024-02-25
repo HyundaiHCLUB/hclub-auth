@@ -151,6 +151,7 @@ public class MemberServiceImpl implements MemberService{
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 		List<String> interestList = Arrays.asList(interests.split(","));
 
+
 		Map<String, List<String>> requestBody = new HashMap<>();
 		requestBody.put("hobbies",interestList);
 
