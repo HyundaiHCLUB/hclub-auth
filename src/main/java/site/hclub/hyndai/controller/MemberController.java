@@ -155,9 +155,33 @@ public class MemberController {
     /***
      *  마이페이지 - 내가 속한 동아리
      */
-    @GetMapping("/mypage/club/{member_id}")
-    public ResponseEntity<MypageClubResponse> getMypageClubInfo(@PathVariable("member_id") String memberId){
+    @GetMapping("/mypage/clubs")
+    public ResponseEntity<MypageClubResponse> getMypageClubInfo(Principal principal, HttpServletRequest request){
         MypageClubResponse response = new MypageClubResponse();
+        String memberId = "";
+        // 1. 헤더에서 멤버아이디 가져오기
+        // "Authorization" 헤더에서 토큰을 추출
+        String token = request.getHeader("Authorization");
+        log.info("token : " + token);
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer "을 제거합니다.
+            try {
+                memberId = principal.getName();
+                log.info("get Member ID : " + memberId);
+                // userId를 ResponseEntity에 담아 반환합니다.
+            } catch (Exception e) {
+                // 토큰이 유효하지 않은 경우
+                log.error(e.getMessage());
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Invalid token");
+            }
+        } else {
+            // 헤더에 Bearer 토큰이 없는 경우.
+            log.info("=== token is NULL ===");
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Authorization header is missing or not in Bearer format");
+        }
+        // 2. 꺼내온 memberId 로 가입된 동아리 조회
         try{
             response = memberService.getMypageClubInfo(memberId);
             log.info(response.toString());
@@ -175,7 +199,7 @@ public class MemberController {
     public ResponseEntity<List<MypageMatchHistoryResponse>> getMypageCompInfo(Principal principal, HttpServletRequest request){
         List<MypageMatchHistoryResponse> response;
         // 1. 헤더에서 멤버아이디 가져오기
-        // "Authorization" 헤더에서 토큰을 추출합니다.
+        // "Authorization" 헤더에서 토큰을 추출
         String token = request.getHeader("Authorization");
         log.info("token : " + token);
         String memberId = "";
@@ -259,4 +283,5 @@ public class MemberController {
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
 }
