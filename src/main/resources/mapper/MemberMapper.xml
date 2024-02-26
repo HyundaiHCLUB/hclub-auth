@@ -106,7 +106,7 @@
 		ON      s.team_no = t.team_no
 		JOIN    match m
 		ON      s.score_no = m.win_team_score_no
-		AND     s.score_no = m.lose_team_score_no
+		OR    s.score_no = m.lose_team_score_no
 		WHERE   mb.member_id = #{memberId}
 	</select>
 

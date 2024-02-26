@@ -171,10 +171,33 @@ public class MemberController {
     /***
      *  마이페이지 - 매치 히스토리
      */
-    @GetMapping(value = "/mypage/comp/{memberId}")
-    public ResponseEntity<List<MypageMatchHistoryResponse>> getMypageCompInfo(@PathVariable("memberId") String memberId){
+    @GetMapping(value = "/mypage/history")
+    public ResponseEntity<List<MypageMatchHistoryResponse>> getMypageCompInfo(Principal principal, HttpServletRequest request){
         List<MypageMatchHistoryResponse> response;
-        log.info("input(Controller) : " + memberId);
+        // 1. 헤더에서 멤버아이디 가져오기
+        // "Authorization" 헤더에서 토큰을 추출합니다.
+        String token = request.getHeader("Authorization");
+        log.info("token : " + token);
+        String memberId = "";
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer "을 제거합니다.
+            try {
+                memberId = principal.getName();
+                log.info("get Member ID : " + memberId);
+                // userId를 ResponseEntity에 담아 반환합니다.
+            } catch (Exception e) {
+                // 토큰이 유효하지 않은 경우
+                log.error(e.getMessage());
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Invalid token");
+            }
+        } else {
+            // 헤더에 Bearer 토큰이 없는 경우.
+            log.info("=== token is NULL ===");
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Authorization header is missing or not in Bearer format");
+        }
+        // 2. 조회한 멤버 아이디로 매치 리스트 가져오기
         try{
             response = memberService.getMypageMatchHistory(memberId);
             if (response != null) {
