@@ -71,6 +71,8 @@
 				,c.club_image	AS	clubImage
 				,c.club_info	AS	clubInfo
 				,c.club_loc		AS	clubLoc
+		     	,TO_CHAR(c.created_at, 'YYYY-MM-DD')	AS	createdAt
+		     	,c.use_yn		AS	useYN
 				,ctg.category_name	AS categoryName
 		FROM 	club c
 		JOIN	member_club mc

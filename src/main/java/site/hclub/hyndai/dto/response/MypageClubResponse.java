@@ -11,7 +11,9 @@ import org.springframework.boot.SpringApplication;
 public class MypageClubResponse {
     private String  clubName;
     private String  clubImage;
-    private String  clubInfo;
+    private String  clubInfo;   // 클럽 소개
     private String  clubLoc;
+    private String  createdAt;   // 개설일
+    private String  useYN;      // 개설 여부
     private String  categoryName;
 }
