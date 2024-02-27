@@ -117,4 +117,19 @@
 		SET		member_image = #{url}
 		WHERE	member_id = #{memberId}
 	</update>
+
+	<insert id="saveProductsInfo">
+		INSERT	INTO products(
+		       		 products_no
+		       		,products_name
+		       		,products_price
+		       		,products_image
+				)
+		VALUES (
+		       		products_seq.nextval
+		       		,#{name}
+		       		,#{price}
+		       		,#{image}
+		)
+	</insert>
 </mapper>

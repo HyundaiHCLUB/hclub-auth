@@ -12,6 +12,7 @@ import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
 import site.hclub.hyndai.dto.SignInDto;
+import site.hclub.hyndai.dto.request.RegisterProductsRequest;
 import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
@@ -287,4 +288,28 @@ public class MemberController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+
+    /**
+     *  상품 등록 API
+     *  - S3 이미지 업로드
+     *  - DB 에 상품정보 저장 (상품명, 가격, 상품 이미지 url)
+     * */
+    @PostMapping(value = "/products"
+            ,consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> registerProducts(@RequestPart(value = "productImage") MultipartFile multipartFile,
+                                             @RequestPart(value = "productRequest")RegisterProductsRequest request)
+    {
+        String url = "";
+        try{
+            // 1. 이미지 S3 업로드
+            url = memberService.insertProductImage(multipartFile);
+            // 2. DB 데이터 저장 (products 테이블)
+            request.setProductImage(url);
+            memberService.saveProductInfo(request);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("failed", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
 }

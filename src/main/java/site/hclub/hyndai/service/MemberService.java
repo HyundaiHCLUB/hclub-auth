@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
+import site.hclub.hyndai.dto.request.RegisterProductsRequest;
 import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
@@ -55,4 +56,10 @@ public interface MemberService {
 	void insertMemberClubInterest(String memberId,String interests);
 
 	String updateProfileImage(MultipartFile multipartFile, String memberId) throws IOException;
+
+	// S3 에 상품 이미지 업로드
+	String insertProductImage(MultipartFile multipartFile);
+
+	// DB에 상품 정보 저장
+	void saveProductInfo(RegisterProductsRequest request);
 }
