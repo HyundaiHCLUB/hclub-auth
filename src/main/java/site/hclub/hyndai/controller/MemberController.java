@@ -20,6 +20,7 @@ import site.hclub.hyndai.service.MemberService;
 import site.hclub.hyndai.service.UserService;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -156,8 +157,8 @@ public class MemberController {
      *  마이페이지 - 내가 속한 동아리
      */
     @GetMapping("/mypage/clubs")
-    public ResponseEntity<MypageClubResponse> getMypageClubInfo(Principal principal, HttpServletRequest request){
-        MypageClubResponse response = new MypageClubResponse();
+    public ResponseEntity<List<MypageClubResponse>> getMypageClubInfo(Principal principal, HttpServletRequest request){
+        List<MypageClubResponse> response = new ArrayList<MypageClubResponse>();
         String memberId = "";
         // 1. 헤더에서 멤버아이디 가져오기
         // "Authorization" 헤더에서 토큰을 추출
@@ -265,7 +266,9 @@ public class MemberController {
     }
 
 
-    // 마이페이지 - 프로필 사진 변경
+    /**
+     *  마이페이지 - 프로필 사진 변경
+     *  */
     @PostMapping(value = "/mypage/profile",
                 consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> updateUserProfileImage(@RequestPart(value = "image") MultipartFile multipartFile,

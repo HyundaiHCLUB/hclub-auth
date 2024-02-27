@@ -49,7 +49,7 @@ public interface MemberMapper {
 	/* input : 사원번호 -> output: employee */
     Employee getEmployeeInfo(String employeeNo);
 
-	MypageClubResponse getMypageClubInfo(String memberId);
+	List<MypageClubResponse> getMypageClubInfo(String memberId);
 
 	void updateUserPw(UpdateMemberInfoRequest request);
 

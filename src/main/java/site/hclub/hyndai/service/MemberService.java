@@ -46,7 +46,7 @@ public interface MemberService {
 	/* 마이페이지 - 기본 인적사항*/
 	MyPageInfoResponse getMypageUserInfo(String memberId);
 
-	MypageClubResponse getMypageClubInfo(String memberId);
+	List<MypageClubResponse> getMypageClubInfo(String memberId);
 
 	void updateMemberInfo(UpdateMemberInfoRequest request);
 

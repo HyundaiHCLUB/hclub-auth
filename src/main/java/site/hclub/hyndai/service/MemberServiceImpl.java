@@ -113,8 +113,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MypageClubResponse getMypageClubInfo(String memberId) {
-        MypageClubResponse response = memberMapper.getMypageClubInfo(memberId);
+    public List<MypageClubResponse> getMypageClubInfo(String memberId) {
+        List<MypageClubResponse> response = memberMapper.getMypageClubInfo(memberId);
         return response;
     }
 
