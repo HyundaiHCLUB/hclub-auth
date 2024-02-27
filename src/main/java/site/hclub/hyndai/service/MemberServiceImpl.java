@@ -17,6 +17,7 @@ import site.hclub.hyndai.domain.Employee;
 import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
+import site.hclub.hyndai.dto.request.RegisterProductsRequest;
 import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.HobbiesClassifiedResponse;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
@@ -113,8 +114,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MypageClubResponse getMypageClubInfo(String memberId) {
-        MypageClubResponse response = memberMapper.getMypageClubInfo(memberId);
+    public List<MypageClubResponse> getMypageClubInfo(String memberId) {
+        List<MypageClubResponse> response = memberMapper.getMypageClubInfo(memberId);
         return response;
     }
 
@@ -139,8 +140,8 @@ public class MemberServiceImpl implements MemberService {
         /* S3 업로드 */
         String filePath = "profile";
         List<MultipartFile> multipartFiles = new ArrayList<>();
-        System.out.println("=========== SERVICE =============");
-        System.out.println("ORIGINAL FILE NAME : " + multipartFile.getOriginalFilename());
+        log.info("=========== SERVICE =============");
+        log.info("ORIGINAL FILE NAME : " + multipartFile.getOriginalFilename());
         multipartFiles.add(multipartFile);
         // uploadFiles 메서드를 사용하여 파일 업로드
         List<String> urls = amazonS3Service.uploadFiles(filePath, multipartFiles);
@@ -206,4 +207,37 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
+    /* 상품 이미지 S3 업로드 */
+    @Override
+    public String insertProductImage(MultipartFile multipartFile){
+        String url;
+        /* S3 업로드 */
+        String filePath = "products";
+        List<MultipartFile> multipartFiles = new ArrayList<>();
+        log.info("=========== SERVICE =============");
+        log.info("ORIGINAL FILE NAME : " + multipartFile.getOriginalFilename());
+        multipartFiles.add(multipartFile);
+        // uploadFiles 메서드를 사용하여 파일 업로드
+        List<String> urls = null;
+        try {
+            urls = amazonS3Service.uploadFiles(filePath, multipartFiles);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        // 반환된 URL 리스트에서 첫 번째 URL을 사용
+        url = urls.get(0);
+        log.info("url -> " + url);
+        return url;
+    }
+
+    /* DB에 상품 정보 저장*/
+    @Override
+    public void saveProductInfo(RegisterProductsRequest request) {
+        log.info("saveProductsInfo ==> " + request.toString());
+        String  name = request.getProductName();
+        Long    price = request.getProductPrice();
+        String  image = request.getProductImage();
+        memberMapper.saveProductsInfo(name, price, image);
+    }
 }

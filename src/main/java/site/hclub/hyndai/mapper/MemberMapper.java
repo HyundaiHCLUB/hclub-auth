@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 import site.hclub.hyndai.domain.Employee;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
+import site.hclub.hyndai.dto.request.RegisterProductsRequest;
 import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
 import site.hclub.hyndai.dto.response.MypageMatchHistoryResponse;
@@ -49,11 +50,13 @@ public interface MemberMapper {
 	/* input : 사원번호 -> output: employee */
     Employee getEmployeeInfo(String employeeNo);
 
-	MypageClubResponse getMypageClubInfo(String memberId);
+	List<MypageClubResponse> getMypageClubInfo(String memberId);
 
 	void updateUserPw(UpdateMemberInfoRequest request);
 
 	List<MypageMatchHistoryResponse> getMypageMatchHistory(String memberId);
 
 	void updateProfileImage(@Param("url") String url, @Param("memberId") String memberId);
+
+	void saveProductsInfo(@Param("name")String name, @Param("price") Long price, @Param("image")String image);
 }

@@ -12,6 +12,7 @@ import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
 import site.hclub.hyndai.dto.SignInDto;
+import site.hclub.hyndai.dto.request.RegisterProductsRequest;
 import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
@@ -20,6 +21,7 @@ import site.hclub.hyndai.service.MemberService;
 import site.hclub.hyndai.service.UserService;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -155,9 +157,33 @@ public class MemberController {
     /***
      *  마이페이지 - 내가 속한 동아리
      */
-    @GetMapping("/mypage/club/{member_id}")
-    public ResponseEntity<MypageClubResponse> getMypageClubInfo(@PathVariable("member_id") String memberId){
-        MypageClubResponse response = new MypageClubResponse();
+    @GetMapping("/mypage/clubs")
+    public ResponseEntity<List<MypageClubResponse>> getMypageClubInfo(Principal principal, HttpServletRequest request){
+        List<MypageClubResponse> response = new ArrayList<MypageClubResponse>();
+        String memberId = "";
+        // 1. 헤더에서 멤버아이디 가져오기
+        // "Authorization" 헤더에서 토큰을 추출
+        String token = request.getHeader("Authorization");
+        log.info("token : " + token);
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer "을 제거합니다.
+            try {
+                memberId = principal.getName();
+                log.info("get Member ID : " + memberId);
+                // userId를 ResponseEntity에 담아 반환합니다.
+            } catch (Exception e) {
+                // 토큰이 유효하지 않은 경우
+                log.error(e.getMessage());
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Invalid token");
+            }
+        } else {
+            // 헤더에 Bearer 토큰이 없는 경우.
+            log.info("=== token is NULL ===");
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Authorization header is missing or not in Bearer format");
+        }
+        // 2. 꺼내온 memberId 로 가입된 동아리 조회
         try{
             response = memberService.getMypageClubInfo(memberId);
             log.info(response.toString());
@@ -171,10 +197,33 @@ public class MemberController {
     /***
      *  마이페이지 - 매치 히스토리
      */
-    @GetMapping(value = "/mypage/comp/{memberId}")
-    public ResponseEntity<List<MypageMatchHistoryResponse>> getMypageCompInfo(@PathVariable("memberId") String memberId){
+    @GetMapping(value = "/mypage/history")
+    public ResponseEntity<List<MypageMatchHistoryResponse>> getMypageCompInfo(Principal principal, HttpServletRequest request){
         List<MypageMatchHistoryResponse> response;
-        log.info("input(Controller) : " + memberId);
+        // 1. 헤더에서 멤버아이디 가져오기
+        // "Authorization" 헤더에서 토큰을 추출
+        String token = request.getHeader("Authorization");
+        log.info("token : " + token);
+        String memberId = "";
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer "을 제거합니다.
+            try {
+                memberId = principal.getName();
+                log.info("get Member ID : " + memberId);
+                // userId를 ResponseEntity에 담아 반환합니다.
+            } catch (Exception e) {
+                // 토큰이 유효하지 않은 경우
+                log.error(e.getMessage());
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Invalid token");
+            }
+        } else {
+            // 헤더에 Bearer 토큰이 없는 경우.
+            log.info("=== token is NULL ===");
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Authorization header is missing or not in Bearer format");
+        }
+        // 2. 조회한 멤버 아이디로 매치 리스트 가져오기
         try{
             response = memberService.getMypageMatchHistory(memberId);
             if (response != null) {
@@ -218,7 +267,9 @@ public class MemberController {
     }
 
 
-    // 마이페이지 - 프로필 사진 변경
+    /**
+     *  마이페이지 - 프로필 사진 변경
+     *  */
     @PostMapping(value = "/mypage/profile",
                 consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> updateUserProfileImage(@RequestPart(value = "image") MultipartFile multipartFile,
@@ -235,5 +286,30 @@ public class MemberController {
             return new ResponseEntity<>("failed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+
+    /**
+     *  상품 등록 API
+     *  - S3 이미지 업로드
+     *  - DB 에 상품정보 저장 (상품명, 가격, 상품 이미지 url)
+     * */
+    @PostMapping(value = "/products"
+            ,consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> registerProducts(@RequestPart(value = "productImage") MultipartFile multipartFile,
+                                             @RequestPart(value = "productRequest")RegisterProductsRequest request)
+    {
+        String url = "";
+        try{
+            // 1. 이미지 S3 업로드
+            url = memberService.insertProductImage(multipartFile);
+            // 2. DB 데이터 저장 (products 테이블)
+            request.setProductImage(url);
+            memberService.saveProductInfo(request);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("failed", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 }

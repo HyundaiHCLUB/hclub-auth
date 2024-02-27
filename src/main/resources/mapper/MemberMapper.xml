@@ -71,6 +71,8 @@
 				,c.club_image	AS	clubImage
 				,c.club_info	AS	clubInfo
 				,c.club_loc		AS	clubLoc
+		     	,TO_CHAR(c.created_at, 'YYYY-MM-DD')	AS	createdAt
+		     	,c.use_yn		AS	useYN
 				,ctg.category_name	AS categoryName
 		FROM 	club c
 		JOIN	member_club mc
@@ -106,7 +108,7 @@
 		ON      s.team_no = t.team_no
 		JOIN    match m
 		ON      s.score_no = m.win_team_score_no
-		AND     s.score_no = m.lose_team_score_no
+		OR    s.score_no = m.lose_team_score_no
 		WHERE   mb.member_id = #{memberId}
 	</select>
 
@@ -115,4 +117,19 @@
 		SET		member_image = #{url}
 		WHERE	member_id = #{memberId}
 	</update>
+
+	<insert id="saveProductsInfo">
+		INSERT	INTO products(
+		       		 products_no
+		       		,products_name
+		       		,products_price
+		       		,products_image
+				)
+		VALUES (
+		       		products_seq.nextval
+		       		,#{name}
+		       		,#{price}
+		       		,#{image}
+		)
+	</insert>
 </mapper>
