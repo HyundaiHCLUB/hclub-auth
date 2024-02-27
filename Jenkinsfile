@@ -46,7 +46,7 @@ pipeline {
         steps{
            
             sh '''
-           docker run --name hclub-auth -d -p 8083:8080 popopododo/hclub-auth
+           docker run --name hclub-auth -d -p 8080:8080 popopododo/hclub-auth
             '''
         }
            
