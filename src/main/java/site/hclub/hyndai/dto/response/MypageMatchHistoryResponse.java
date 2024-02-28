@@ -14,6 +14,7 @@ public class MypageMatchHistoryResponse {
     private Long    teamRating;         // 팀레이팅
     private String  matchLoc;           // 경기장소
     private String  matchDate;          // 경기 일자
+    private Long    matchCapacity;
     private Long    score1;
     private Long    score2;
 }

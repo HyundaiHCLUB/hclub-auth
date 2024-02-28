@@ -95,6 +95,7 @@
 			 ,t.match_type		AS	matchType
 			 ,t.team_rating		AS	teamRating
 			 ,t.team_name		AS	teamName
+			 ,t.match_capacity	AS	matchCapacity
 			 ,m.match_loc		AS	matchLoc
 		     ,m.match_date		AS	matchDate
 			 ,(SELECT score_amount FROM SCORE WHERE score_no = m.win_team_score_no) AS score1
