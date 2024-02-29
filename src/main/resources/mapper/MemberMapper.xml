@@ -133,4 +133,16 @@
 		       		,#{image}
 		)
 	</insert>
+
+	<select id="getMyProducts" resultType="site.hclub.hyndai.dto.response.MypageProductsResponse">
+		SELECT	p.products_name 	AS	productName
+				,p.products_price	AS	productPrice
+				,p.products_image	AS	productImage
+		FROM	settlement s
+		JOIN 	products p
+		ON 		s.products_no = p.products_no
+		JOIN 	member	m
+		ON		s.recipent_member_no = m.member_no
+		WHERE	m.member_id = #{memberId}
+	</select>
 </mapper>

@@ -11,6 +11,7 @@ import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
 import site.hclub.hyndai.dto.response.MypageMatchHistoryResponse;
+import site.hclub.hyndai.dto.response.MypageProductsResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -62,4 +63,6 @@ public interface MemberService {
 
 	// DB에 상품 정보 저장
 	void saveProductInfo(RegisterProductsRequest request);
+
+	List<MypageProductsResponse> getMyProducts(String memberId);
 }

@@ -17,6 +17,7 @@ import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MyPageInfoResponse;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
 import site.hclub.hyndai.dto.response.MypageMatchHistoryResponse;
+import site.hclub.hyndai.dto.response.MypageProductsResponse;
 import site.hclub.hyndai.service.MemberService;
 import site.hclub.hyndai.service.UserService;
 
@@ -311,5 +312,48 @@ public class MemberController {
             return new ResponseEntity<>("failed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>("success", HttpStatus.OK);
+    }
+
+    /**
+     * 받은 선물 목록 API (마이페이지 - 받은 선물함)
+     * */
+    @GetMapping(value = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<MypageProductsResponse>> getMyProducts(Principal principal, HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        log.info("token : " + token);
+        String memberId = "";
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // "Bearer "을 제거합니다.
+            try {
+                memberId = principal.getName();
+                log.info("get Member ID : " + memberId);
+                // userId를 ResponseEntity에 담아 반환합니다.
+            } catch (Exception e) {
+                // 토큰이 유효하지 않은 경우
+                log.error(e.getMessage());
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Invalid token");
+            }
+        } else {
+            // 헤더에 Bearer 토큰이 없는 경우.
+            log.info("=== token is NULL ===");
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Authorization header is missing or not in Bearer format");
+        }
+        // 2. 조회한 멤버 아이디로 받은 선물 목록 조회
+        List<MypageProductsResponse> response;
+        try{
+            response = memberService.getMyProducts(memberId);
+            if (response != null) {
+                log.info("response -> " + response.toString());
+            } else {
+                log.warn("No match history found for member_id: " + memberId);
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

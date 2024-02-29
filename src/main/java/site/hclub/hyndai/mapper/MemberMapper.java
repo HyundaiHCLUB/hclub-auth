@@ -8,6 +8,7 @@ import site.hclub.hyndai.dto.request.RegisterProductsRequest;
 import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
 import site.hclub.hyndai.dto.response.MypageClubResponse;
 import site.hclub.hyndai.dto.response.MypageMatchHistoryResponse;
+import site.hclub.hyndai.dto.response.MypageProductsResponse;
 
 import java.util.List;
 
@@ -59,4 +60,6 @@ public interface MemberMapper {
 	void updateProfileImage(@Param("url") String url, @Param("memberId") String memberId);
 
 	void saveProductsInfo(@Param("name")String name, @Param("price") Long price, @Param("image")String image);
+
+	List<MypageProductsResponse> getMyProducts(String memberId);
 }

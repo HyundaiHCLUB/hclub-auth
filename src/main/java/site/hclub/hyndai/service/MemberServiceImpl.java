@@ -19,10 +19,7 @@ import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
 import site.hclub.hyndai.dto.request.RegisterProductsRequest;
 import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
-import site.hclub.hyndai.dto.response.HobbiesClassifiedResponse;
-import site.hclub.hyndai.dto.response.MyPageInfoResponse;
-import site.hclub.hyndai.dto.response.MypageClubResponse;
-import site.hclub.hyndai.dto.response.MypageMatchHistoryResponse;
+import site.hclub.hyndai.dto.response.*;
 import site.hclub.hyndai.mapper.ClubMapper;
 import site.hclub.hyndai.mapper.MemberMapper;
 import site.hclub.hyndai.mapper.TokenMapper;
@@ -239,5 +236,13 @@ public class MemberServiceImpl implements MemberService {
         Long    price = request.getProductPrice();
         String  image = request.getProductImage();
         memberMapper.saveProductsInfo(name, price, image);
+    }
+
+    /* 받은 상품 목록 조회 (마이페이지) */
+
+    @Override
+    public List<MypageProductsResponse> getMyProducts(String memberId) {
+        List<MypageProductsResponse> response = memberMapper.getMyProducts(memberId);
+        return response;
     }
 }
