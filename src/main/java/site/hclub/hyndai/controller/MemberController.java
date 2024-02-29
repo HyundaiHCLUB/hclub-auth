@@ -98,13 +98,16 @@ public class MemberController {
         
         return ApiResponse.success(GET_EMPLOYEE_YN_SUCCESS, response);
     }
-    @PostMapping("/test")
+    @PostMapping("/getMemberId")
     public ResponseEntity<Map<String, Object>> test(Principal principal , HttpServletRequest authorizationHeader){
     	Map<String, Object> map =new HashMap<>();
  
     	String userId =  principal.getName();
+    	MemberVO mvo = memberService.getMemberInfo(userId);
+    	map.put("userId", userId);
+    	map.put("userNo",mvo.getMemberNo());
        	log.info( "test getId: "+ userId);
-    	 return ResponseEntity.ok(map);
+    	return ResponseEntity.ok(map);
     }
 
 
