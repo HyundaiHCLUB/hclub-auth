@@ -107,6 +107,7 @@ public class MemberController {
     	MemberVO mvo = memberService.getMemberInfo(userId);
     	map.put("userId", userId);
     	map.put("userNo",mvo.getMemberNo());
+    	map.put("userImageUrl", mvo.getMemberImage());
        	log.info( "test getId: "+ userId);
     	return ResponseEntity.ok(map);
     }
