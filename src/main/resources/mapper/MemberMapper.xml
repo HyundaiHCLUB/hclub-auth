@@ -104,8 +104,12 @@
 			 ,t.match_capacity	AS	matchCapacity
 			 ,m.match_loc		AS	matchLoc
 		     ,m.match_date		AS	matchDate
-			 ,(SELECT score_amount FROM SCORE WHERE score_no = m.win_team_score_no) AS score1
-			 ,(SELECT score_amount FROM score WHERE score_no = m.lose_team_score_no) AS score2
+			 ,(SELECT score_no FROM SCORE WHERE score_no = m.win_team_score_no) AS winTeamScoreNo
+			 ,(SELECT score_amount FROM SCORE WHERE score_no = m.win_team_score_no) AS winTeamScoreAmount
+			 ,(SELECT score_no FROM SCORE WHERE score_no = m.lose_team_score_no) AS loseTeamScoreNo
+			 ,(SELECT score_amount FROM score WHERE score_no = m.lose_team_score_no) AS loseTeamScoreAmount
+			 ,(SELECT team_no FROM score WHERE score_no = (SELECT score_no FROM SCORE WHERE score_no = m.win_team_score_no)) AS winTeamNo
+			 ,(SELECT team_no FROM score WHERE score_no = (SELECT score_no FROM SCORE WHERE score_no = m.lose_team_score_no)) AS loseTeamNo
 		FROM    member mb
 		JOIN    member_team mt
 		ON      mb.member_no = mt.member_no
