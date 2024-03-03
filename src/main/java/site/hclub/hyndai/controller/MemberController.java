@@ -206,7 +206,7 @@ public class MemberController {
         // 1. 헤더에서 멤버아이디 가져오기
         // "Authorization" 헤더에서 토큰을 추출
         String token = request.getHeader("Authorization");
-        log.info("token : " + token);
+        log.info("token == " + token);
         String memberId = "";
         if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7); // "Bearer "을 제거합니다.
@@ -217,6 +217,7 @@ public class MemberController {
             } catch (Exception e) {
                 // 토큰이 유효하지 않은 경우
                 log.error(e.getMessage());
+                e.printStackTrace();
                 Map<String, String> errorResponse = new HashMap<>();
                 errorResponse.put("error", "Invalid token");
             }
