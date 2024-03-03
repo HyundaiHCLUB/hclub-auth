@@ -171,10 +171,10 @@ public class MemberServiceImpl implements MemberService {
         HttpEntity<Map<String, List<String>>> request = new HttpEntity<>(requestBody, httpHeaders);
 
         HobbiesClassifiedResponse response = restTemplate.postForObject(url, request, HobbiesClassifiedResponse.class);
-        log.info(response.getHobbies().toString());
+
         List<Integer> topInterestList = response.getHobbies();
         topInterestList.remove(topInterestList.size() - 1);
-        log.info(topInterestList.toString());
+        log.info("분류된 관심사"+ topInterestList.toString());
 
         List<int[]> indexedNumbers = new ArrayList<>();
         for (int i = 0; i < topInterestList.size(); i++) {
