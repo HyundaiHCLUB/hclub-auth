@@ -4,155 +4,178 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="site.hclub.hyndai.mapper.MemberMapper">
 
- 
+
     <select id="getMemberInfo" resultType="site.hclub.hyndai.domain.MemberVO" parameterType="String">
-        SELECT 
-		    M.MEMBER_NO as memberNo
-		    , M.MEMBER_ID as memberId
-		    , NVL(M.MEMBER_IMAGE, 'https://h-clubbucket.s3.ap-northeast-2.amazonaws.com/profile/242474.jpg') as memberImage
-		    , M.MEMBER_INTEREST as memberInterest
-		    , M.MEMBER_RATING as memberRating
-		    , M.EMPLOYEE_NO as employeeNo
-		    , M.MEMBER_PW as memberPw
-		    , M.ADMIN_YN as adminYn
-            , E.EMPLOYEE_NAME AS employeeName
-            , E.EMPLOYEE_DEPT AS employeeDept
-            , E. EMPLOYEE_POSITION as employeePosition
-		FROM MEMBER M
-		INNER JOIN EMPLOYEE E
-    	ON E.EMPLOYEE_NO = M.EMPLOYEE_NO
-    	WHERE 1 = 1
-    		AND 
-			M.member_id = #{memberId}
+        SELECT M.MEMBER_NO                                                                    as memberNo
+             , M.MEMBER_ID                                                                    as memberId
+             , NVL(M.MEMBER_IMAGE,
+                   'https://h-clubbucket.s3.ap-northeast-2.amazonaws.com/profile/242474.jpg') as memberImage
+             , M.MEMBER_INTEREST                                                              as memberInterest
+             , M.MEMBER_RATING                                                                as memberRating
+             , M.EMPLOYEE_NO                                                                  as employeeNo
+             , M.MEMBER_PW                                                                    as memberPw
+             , M.ADMIN_YN                                                                     as adminYn
+             , E.EMPLOYEE_NAME                                                                AS employeeName
+             , E.EMPLOYEE_DEPT                                                                AS employeeDept
+             , E.EMPLOYEE_POSITION                                                            as employeePosition
+        FROM MEMBER M
+                 INNER JOIN EMPLOYEE E
+                            ON E.EMPLOYEE_NO = M.EMPLOYEE_NO
+        WHERE 1 = 1
+          AND M.member_id = #{memberId}
     </select>
-    <select id="getMemberInfoByVo" resultType="site.hclub.hyndai.domain.MemberVO" parameterType="site.hclub.hyndai.domain.MemberVO">
-    select 
-		    member_no as memberNo
-		    , member_id as memberId
-		    , member_image as memberImage
-		    , member_interest as memberInterest
-		    , member_rating as memberRating
-		    , employee_no as employeeNo
-		    , member_pw as memberPw
-		    , admin_yn as adminYn
-		from member
-			where
-		member_no = #{memberNo}
-    
+    <select id="getMemberInfoByVo" resultType="site.hclub.hyndai.domain.MemberVO"
+            parameterType="site.hclub.hyndai.domain.MemberVO">
+        select member_no       as memberNo
+             , member_id       as memberId
+             , member_image    as memberImage
+             , member_interest as memberInterest
+             , member_rating   as memberRating
+             , employee_no     as employeeNo
+             , member_pw       as memberPw
+             , admin_yn        as adminYn
+        from member
+        where member_no = #{memberNo}
+
     </select>
     <select id="getMemberIdYn" parameterType="String" resultType="int">
-    	select
-    		count(*)
-    	from
-    		member
-    	where
-    		member_id = #{memberId}
+        select count(*)
+        from member
+        where member_id = #{memberId}
     </select>
-     <select id="getEmployeeYn" parameterType="site.hclub.hyndai.dto.EmployeeDTO" resultType="int">
-     	select 
-     		count(*) 
-     	from 
-     		employee
-     	where employee_no = #{employeeNo}
-     	and employee_name = #{employeeName}
-     </select>
-     <insert id="insertMemberInfo" parameterType="site.hclub.hyndai.domain.MemberVO">
-     INSERT INTO member 
-     ( member_id, member_interest,  employee_no, member_pw, admin_yn ) 
-		VALUES
-	 ( #{memberId}, #{memberInterest}, #{employeeNo}, #{memberPw}, #{adminYn}) 
-     </insert>
+    <select id="getEmployeeYn" parameterType="site.hclub.hyndai.dto.EmployeeDTO" resultType="int">
+        select count(*)
+        from employee
+        where employee_no = #{employeeNo}
+          and employee_name = #{employeeName}
+    </select>
+    <insert id="insertMemberInfo" parameterType="site.hclub.hyndai.domain.MemberVO">
+        INSERT INTO member
+            (member_id, member_interest, employee_no, member_pw, admin_yn)
+        VALUES (#{memberId}, #{memberInterest}, #{employeeNo}, #{memberPw}, #{adminYn})
+    </insert>
 
-	<select id="getEmployeeInfo" resultType="site.hclub.hyndai.domain.Employee">
-		SELECT	employee_no 	AS	employeeNo
-				,employee_dept 	AS	employeeDept
-				,employee_position AS employeePosition
-				,employee_name	AS	employeeName
-		FROM	employee
-		WHERE	employee_no = #{employeeNo}
-	</select>
+    <select id="getEmployeeInfo" resultType="site.hclub.hyndai.domain.Employee">
+        SELECT employee_no       AS employeeNo
+             , employee_dept     AS employeeDept
+             , employee_position AS employeePosition
+             , employee_name     AS employeeName
+        FROM employee
+        WHERE employee_no = #{employeeNo}
+    </select>
 
-	<select id="getMypageClubInfo" resultType="site.hclub.hyndai.dto.response.MypageClubResponse">
-		SELECT 	c.club_name		AS	clubName
-				,c.club_image	AS	clubImage
-				,c.club_info	AS	clubInfo
-				,c.club_loc		AS	clubLoc
-		     	,TO_CHAR(c.created_at, 'YYYY-MM-DD')	AS	createdAt
-		     	,c.use_yn		AS	useYN
-				,ctg.category_name	AS categoryName
-		FROM 	club c
-		JOIN	member_club mc
-		ON		c.club_no = mc.club_no
-		JOIN	member m
-		ON		mc.member_no = m.member_no
-		JOIN 	category ctg
-		ON 		ctg.category_id = c.category_id
-		WHERE 	m.member_id = #{memberId}
-	</select>
+    <select id="getMypageClubInfo" resultType="site.hclub.hyndai.dto.response.MypageClubResponse">
+        SELECT c.club_name                         AS clubName
+             , c.club_image                        AS clubImage
+             , c.club_info                         AS clubInfo
+             , c.club_loc                          AS clubLoc
+             , TO_CHAR(c.created_at, 'YYYY-MM-DD') AS createdAt
+             , c.use_yn                            AS useYN
+             , ctg.category_name                   AS categoryName
+        FROM club c
+                 JOIN member_club mc
+                      ON c.club_no = mc.club_no
+                 JOIN member m
+                      ON mc.member_no = m.member_no
+                 JOIN category ctg
+                      ON ctg.category_id = c.category_id
+        WHERE m.member_id = #{memberId}
+    </select>
 
-	<update id="updateUserPw" parameterType="site.hclub.hyndai.dto.request.UpdateMemberInfoRequest">
-		UPDATE	member
-		SET		member_pw = #{memberPw}
-		WHERE	member_id = #{memberId}
-	</update>
+    <update id="updateUserPw" parameterType="site.hclub.hyndai.dto.request.UpdateMemberInfoRequest">
+        UPDATE member
+        SET member_pw = #{memberPw}
+        WHERE member_id = #{memberId}
+    </update>
 
-	<select id="getMypageMatchHistory" parameterType="String" resultType="site.hclub.hyndai.dto.response.MypageMatchHistoryResponse">
-		SELECT  t.team_no		AS	teamNo
-			 ,t.match_type		AS	matchType
-			 ,t.team_rating		AS	teamRating
-			 ,t.team_name		AS	teamName
-			 ,t.match_capacity	AS	matchCapacity
-			 ,m.match_loc		AS	matchLoc
-		     ,m.match_date		AS	matchDate
-			 ,(SELECT score_no FROM SCORE WHERE score_no = m.win_team_score_no) AS winTeamScoreNo
-			 ,(SELECT score_amount FROM SCORE WHERE score_no = m.win_team_score_no) AS winTeamScoreAmount
-			 ,(SELECT score_no FROM SCORE WHERE score_no = m.lose_team_score_no) AS loseTeamScoreNo
-			 ,(SELECT score_amount FROM score WHERE score_no = m.lose_team_score_no) AS loseTeamScoreAmount
-			 ,(SELECT team_no FROM score WHERE score_no = (SELECT score_no FROM SCORE WHERE score_no = m.win_team_score_no)) AS winTeamNo
-			 ,(SELECT team_no FROM score WHERE score_no = (SELECT score_no FROM SCORE WHERE score_no = m.lose_team_score_no)) AS loseTeamNo
-		FROM    member mb
-		JOIN    member_team mt
-		ON      mb.member_no = mt.member_no
-		JOIN    team t
-		ON      mt.team_no = t.team_no
-		JOIN    score s
-		ON      s.team_no = t.team_no
-		JOIN    match m
-		ON      s.score_no = m.win_team_score_no
-		OR    s.score_no = m.lose_team_score_no
-		WHERE   mb.member_id = #{memberId}
-	</select>
+    <select id="getMypageMatchHistory" parameterType="String"
+            resultType="site.hclub.hyndai.dto.response.MypageMatchHistoryResponse">
+        SELECT t.team_no                                                                             AS teamNo
+             , t.match_type                                                                          AS matchType
+             , t.team_rating                                                                         AS teamRating
+             , t.team_name                                                                           AS teamName
+             , t.match_capacity                                                                      AS matchCapacity
+             , m.match_loc                                                                           AS matchLoc
+             , m.match_date                                                                          AS matchDate
+             , (SELECT score_no FROM SCORE WHERE score_no = m.win_team_score_no)                     AS winTeamScoreNo
+             , (SELECT score_amount FROM SCORE WHERE score_no = m.win_team_score_no)                 AS winTeamScoreAmount
+             , (SELECT score_no FROM SCORE WHERE score_no = m.lose_team_score_no)                    AS loseTeamScoreNo
+             , (SELECT score_amount FROM score WHERE score_no = m.lose_team_score_no)                AS loseTeamScoreAmount
+             , (SELECT team_no
+                FROM score
+                WHERE score_no = (SELECT score_no FROM SCORE WHERE score_no = m.win_team_score_no))  AS winTeamNo
+             , (SELECT team_no
+                FROM score
+                WHERE score_no = (SELECT score_no FROM SCORE WHERE score_no = m.lose_team_score_no)) AS loseTeamNo
+        FROM member mb
+                 JOIN member_team mt
+                      ON mb.member_no = mt.member_no
+                 JOIN team t
+                      ON mt.team_no = t.team_no
+                 JOIN score s
+                      ON s.team_no = t.team_no
+                 JOIN match m
+                      ON s.score_no = m.win_team_score_no
+                          OR s.score_no = m.lose_team_score_no
+        WHERE mb.member_id = #{memberId}
+    </select>
+    <select id="getMyPageProceedingMatchList" parameterType="String"
+            resultType="site.hclub.hyndai.dto.response.MyPageProceedingMatchResponse">
+        SELECT m.match_hist_no                                         AS "matchNo",
+               t.match_type                                            AS "gameType",
+               t.team_name                                             AS "myTeamName",
+               to_char(t.match_capacity || ' VS ' || t.match_capacity) AS "matchCapacity",
+               m.match_loc                                             AS "matchLoc",
+               to_char(m.match_date, 'YYYY/MM/DD HH24:MI:SS')          AS "matchDate",
+               (SELECT team_name
+                FROM team
+                WHERE team_no =
+                      (CASE
+                           WHEN s.team_no = (SELECT team_no FROM score WHERE score_no = m.win_team_score_no)
+                               THEN (SELECT team_no FROM score WHERE score_no = m.lose_team_score_no)
+                           ELSE (SELECT team_no FROM score WHERE score_no = m.win_team_score_no)
+                          END))                                        AS "opponentTeamName"
+        FROM member mb
+                 JOIN member_team mt
+                      ON mb.member_no = mt.member_no
+                 JOIN team t
+                      ON mt.team_no = t.team_no
+                 JOIN score s
+                      ON s.team_no = t.team_no AND s.score_amount = 0
+                 JOIN match m
+                      ON (s.score_no = m.win_team_score_no OR s.score_no = m.lose_team_score_no)
+        WHERE mb.member_id = #{memberId}
+          AND (EXISTS (SELECT 1 FROM SCORE WHERE score_no = m.win_team_score_no AND score_amount = 0)
+            OR EXISTS (SELECT 1 FROM SCORE WHERE score_no = m.lose_team_score_no AND score_amount = 0))
+        ORDER BY m.match_date DESC
+    </select>
 
-	<update id="updateProfileImage">
-		UPDATE	member
-		SET		member_image = #{url}
-		WHERE	member_id = #{memberId}
-	</update>
+    <update id="updateProfileImage">
+        UPDATE member
+        SET member_image = #{url}
+        WHERE member_id = #{memberId}
+    </update>
 
-	<insert id="saveProductsInfo">
-		INSERT	INTO products(
-		       		 products_no
-		       		,products_name
-		       		,products_price
-		       		,products_image
-				)
-		VALUES (
-		       		products_seq.nextval
-		       		,#{name}
-		       		,#{price}
-		       		,#{image}
-		)
-	</insert>
+    <insert id="saveProductsInfo">
+        INSERT INTO products( products_no
+                            , products_name
+                            , products_price
+                            , products_image)
+        VALUES ( products_seq.nextval
+               , #{name}
+               , #{price}
+               , #{image})
+    </insert>
 
-	<select id="getMyProducts" resultType="site.hclub.hyndai.dto.response.MypageProductsResponse">
-		SELECT	p.products_name 	AS	productName
-				,p.products_price	AS	productPrice
-				,p.products_image	AS	productImage
-		FROM	settlement s
-		JOIN 	products p
-		ON 		s.products_no = p.products_no
-		JOIN 	member	m
-		ON		s.recipent_member_no = m.member_no
-		WHERE	m.member_id = #{memberId}
-	</select>
+    <select id="getMyProducts" resultType="site.hclub.hyndai.dto.response.MypageProductsResponse">
+        SELECT p.products_name  AS productName
+             , p.products_price AS productPrice
+             , p.products_image AS productImage
+        FROM settlement s
+                 JOIN products p
+                      ON s.products_no = p.products_no
+                 JOIN member m
+                      ON s.recipent_member_no = m.member_no
+        WHERE m.member_id = #{memberId}
+    </select>
 </mapper>

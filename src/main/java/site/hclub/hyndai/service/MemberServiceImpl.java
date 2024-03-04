@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import site.hclub.hyndai.common.util.AmazonS3Service;
+import site.hclub.hyndai.common.util.ParseService;
 import site.hclub.hyndai.domain.Employee;
 import site.hclub.hyndai.domain.JwtToken;
 import site.hclub.hyndai.domain.MemberVO;
@@ -48,6 +49,7 @@ public class MemberServiceImpl implements MemberService {
     private final ClubMapper clubMapper;
     private final RestTemplate restTemplate;
     private final AmazonS3Service amazonS3Service;
+    private final ParseService parseService;
     @Autowired
     private TokenMapper tokenMapper;
     @Autowired
@@ -130,6 +132,19 @@ public class MemberServiceImpl implements MemberService {
         return response;
     }
 
+    @Override
+    public List<MyPageProceedingMatchResponse> getMyPageProceedingMatch(String memberId) {
+        List<MyPageProceedingMatchResponse> response = memberMapper.getMyPageProceedingMatchList(memberId);
+        log.info("=== Service ===");
+        log.info("input(Service) : " + memberId);
+        log.info("response -> " + response.toString());
+        for (MyPageProceedingMatchResponse r : response) {
+            r.setGameType(parseService.parseSportsToImage(r.getGameType()));
+       
+        }
+        return response;
+    }
+
     // 마이페이지 - 프로필 사진 수정
     @Override
     public String updateProfileImage(MultipartFile multipartFile, String memberId) throws IOException {
@@ -174,7 +189,7 @@ public class MemberServiceImpl implements MemberService {
 
         List<Integer> topInterestList = response.getHobbies();
         topInterestList.remove(topInterestList.size() - 1);
-        log.info("분류된 관심사"+ topInterestList.toString());
+        log.info("분류된 관심사" + topInterestList.toString());
 
         List<int[]> indexedNumbers = new ArrayList<>();
         for (int i = 0; i < topInterestList.size(); i++) {
@@ -206,7 +221,7 @@ public class MemberServiceImpl implements MemberService {
 
     /* 상품 이미지 S3 업로드 */
     @Override
-    public String insertProductImage(MultipartFile multipartFile){
+    public String insertProductImage(MultipartFile multipartFile) {
         String url;
         /* S3 업로드 */
         String filePath = "products";
@@ -232,9 +247,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void saveProductInfo(RegisterProductsRequest request) {
         log.info("saveProductsInfo ==> " + request.toString());
-        String  name = request.getProductName();
-        Long    price = request.getProductPrice();
-        String  image = request.getProductImage();
+        String name = request.getProductName();
+        Long price = request.getProductPrice();
+        String image = request.getProductImage();
         memberMapper.saveProductsInfo(name, price, image);
     }
 
