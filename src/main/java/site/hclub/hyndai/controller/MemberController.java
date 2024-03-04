@@ -100,14 +100,15 @@ public class MemberController {
         return ApiResponse.success(GET_EMPLOYEE_YN_SUCCESS, response);
     }
     @PostMapping("/getMemberId")
-    public ResponseEntity<ApiResponse< MemberVO>> test(Principal principal , HttpServletRequest authorizationHeader){
+    public ResponseEntity<ApiResponse< MemberVO>> getMemberId(@RequestBody MemberVO mvo, HttpServletRequest authorizationHeader){
     	Map<String, Object> map =new HashMap<>();
  
-    	String userId =  principal.getName();
-    	MemberVO mvo = memberService.getMemberInfo(userId);
+    	//String userId =  principal.getName();
+    	String otherUserId = mvo.getMemberId();
+    	MemberVO paramVo = memberService.getMemberInfo(otherUserId);
     	
-       	log.info( "test getId: "+ userId);
-       	return ApiResponse.success(GET_MEMBER_ID_SUCCESS, mvo);
+       	log.info( "test getId: "+ otherUserId);
+       	return ApiResponse.success(GET_MEMBER_ID_SUCCESS, paramVo);
     }
 
 
