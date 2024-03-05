@@ -403,7 +403,8 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/mypage/history/detail/${matchHistoryNo}")
+    /* 마이페이지 -> 매치히스토리 -> 각 매치별 상세정보 */
+    @GetMapping("/mypage/history/detail/{matchHistoryNo}")
     public ResponseEntity<MatchHistoryDetailResponse> getHistoryDetail(@PathVariable("matchHistoryNo")Long matchHistoryNo) {
 
         MatchHistoryDetailResponse response = memberService.getHistoryDetail(matchHistoryNo);
