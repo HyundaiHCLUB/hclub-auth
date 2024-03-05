@@ -399,4 +399,12 @@ public class MemberController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/mypage/history/detail/${matchHistoryNo}")
+    public ResponseEntity<MatchHistoryDetailResponse> getHistoryDetail(@PathVariable("matchHistoryNo")Long matchHistoryNo) {
+
+        MatchHistoryDetailResponse response = memberService.getHistoryDetail(matchHistoryNo);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }
