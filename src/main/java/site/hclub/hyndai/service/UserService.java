@@ -25,7 +25,7 @@ public class UserService {
 	private Long expiredMs = 1000 * 60 * 60l;
 	
 	public String login(String userName, String password) {
-		//인증과정 생략
+		
 		return JwtUtil.createJwt(userName, secretKey,expiredMs);
 	}
 
@@ -36,8 +36,6 @@ public class UserService {
 		
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 		JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
-	        
-		// return jwtToken;
         
 		return jwtToken;
 	}

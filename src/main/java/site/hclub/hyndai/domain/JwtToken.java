@@ -28,4 +28,6 @@ public class JwtToken {
     private long memberNo;
     
     private long tokenId; 
+    
+    private String adminYn;
 }
