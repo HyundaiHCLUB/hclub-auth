@@ -49,9 +49,23 @@ public class MemberVO  implements UserDetails{
     */
     private String memberPw;
     /**
-     관리자여부
+    관리자 여부
+    */
+    private String adminYn;
+    /**
+     회원명
      */
-    private String adminYn ;
+    private String employeeName ;
+    /**
+     회원 부서
+    */
+    private String employeeDept;
+    /**
+    회원 직위
+    */
+    private String employeePosition ;
+   
+   
     /**
      권한 role
     */

@@ -14,7 +14,9 @@ public enum SuccessType {
 	
 	GET_MEMBER_DETAIL_SUCCESS(HttpStatus.OK, "멤버 정보 조회 성공"),
 	INSERT_MEMBER_INFO_SUCCESS(HttpStatus.OK, "멤버 정보 삽입 성공"),
-	GET_EMPLOYEE_YN_SUCCESS(HttpStatus.OK, "직원여부 조회 성공")
+	GET_EMPLOYEE_YN_SUCCESS(HttpStatus.OK, "직원여부 조회 성공"),
+	GET_MEMBER_ID_SUCCESS(HttpStatus.OK, "멤버 아이디로 정보 조회 성공")
+	
     /**
      * 201 Created
      */
