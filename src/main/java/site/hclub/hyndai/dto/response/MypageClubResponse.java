@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 @Setter
 @ToString
 public class MypageClubResponse {
+    private Long    clubNo;
     private String  clubName;
     private String  clubImage;
     private String  clubInfo;   // 클럽 소개
