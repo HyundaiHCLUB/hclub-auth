@@ -66,4 +66,6 @@ public interface MemberService {
     void saveProductInfo(RegisterProductsRequest request);
 
     List<MypageProductsResponse> getMyProducts(String memberId);
+
+    MatchHistoryDetailResponse getHistoryDetail(Long matchHistoryNo);
 }

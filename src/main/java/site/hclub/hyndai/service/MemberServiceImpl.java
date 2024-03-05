@@ -254,10 +254,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     /* 받은 상품 목록 조회 (마이페이지) */
-
     @Override
     public List<MypageProductsResponse> getMyProducts(String memberId) {
         List<MypageProductsResponse> response = memberMapper.getMyProducts(memberId);
+        return response;
+    }
+    /* 마이페이지 - 매치 히스토리 상세보기 */
+    @Override
+    public MatchHistoryDetailResponse getHistoryDetail(Long matchHistoryNo) {
+        MatchHistoryDetailResponse response = memberMapper.getHistoryDetail(matchHistoryNo);
         return response;
     }
 }
