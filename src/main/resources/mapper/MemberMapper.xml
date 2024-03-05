@@ -127,7 +127,7 @@
                t.team_name                                             AS "myTeamName",
                to_char(t.match_capacity || ' VS ' || t.match_capacity) AS "matchCapacity",
                m.match_loc                                             AS "matchLoc",
-               to_char(m.match_date, 'YYYY/MM/DD HH24:MI:SS')          AS "matchDate",
+               TO_CHAR(m.match_date, 'YYYY/MM/DD HH24"시" MI"분"')          AS "matchDate",
                (SELECT team_name
                 FROM team
                 WHERE team_no =
