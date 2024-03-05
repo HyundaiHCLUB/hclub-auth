@@ -5,10 +5,7 @@ import site.hclub.hyndai.domain.Employee;
 import site.hclub.hyndai.domain.MemberVO;
 import site.hclub.hyndai.dto.EmployeeDTO;
 import site.hclub.hyndai.dto.request.UpdateMemberInfoRequest;
-import site.hclub.hyndai.dto.response.MyPageProceedingMatchResponse;
-import site.hclub.hyndai.dto.response.MypageClubResponse;
-import site.hclub.hyndai.dto.response.MypageMatchHistoryResponse;
-import site.hclub.hyndai.dto.response.MypageProductsResponse;
+import site.hclub.hyndai.dto.response.*;
 
 import java.util.List;
 
@@ -65,4 +62,6 @@ public interface MemberMapper {
     void saveProductsInfo(@Param("name") String name, @Param("price") Long price, @Param("image") String image);
 
     List<MypageProductsResponse> getMyProducts(String memberId);
+
+    MatchHistoryDetailResponse getHistoryDetail(Long matchHistoryNo);
 }

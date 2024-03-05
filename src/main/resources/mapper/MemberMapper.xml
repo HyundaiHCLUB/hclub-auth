@@ -179,4 +179,22 @@
                       ON s.recipent_member_no = m.member_no
         WHERE m.member_id = #{memberId}
     </select>
+
+    <select id="getHistoryDetail"
+        resultType="site.hclub.hyndai.dto.response.MatchHistoryDetailResponse">
+        SELECT  m.match_hist_no AS  matchHistoryNo
+                ,m.match_loc    AS  matchLoc
+                ,m.win_team_score_no    AS  winTeamScoreNo
+                ,m.lose_team_score_no   AS  loseTeamScoreNo
+                ,to_char(m.match_date, 'YYYY/MM/DD HH:MI:SS')   AS  matchDate
+                , (SELECT score_amount FROM SCORE WHERE score_no = m.win_team_score_no)  AS winTeamScoreAmount
+                , (SELECT score_amount FROM SCORE WHERE score_no = m.lose_team_score_no)  AS loseTeamScoreAmount
+                ,i.image_url    AS  imageUrl
+        FROM    match   m
+        JOIN    match_image mi
+        ON      m.match_hist_no = mi.match_hist_no
+        JOIN    image i
+        ON      i.image_no = mi.image_no
+        WHERE   m.match_hist_no = #{matchHistoryNo}
+    </select>
 </mapper>
