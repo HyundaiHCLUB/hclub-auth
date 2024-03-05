@@ -57,6 +57,9 @@ public class MemberController {
 
         //토큰 정보를 삽입한다.
         memberService.insertTokenInfo(jwtToken, userId);
+        
+		MemberVO paramVo = memberService.getMemberInfo(userId);
+		jwtToken.setAdminYn(paramVo.getAdminYn());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("Authorization", "Bearer " + jwtToken.getAccessToken());
