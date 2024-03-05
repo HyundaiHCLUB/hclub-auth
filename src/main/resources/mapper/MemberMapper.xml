@@ -90,7 +90,8 @@
 
     <select id="getMypageMatchHistory" parameterType="String"
             resultType="site.hclub.hyndai.dto.response.MypageMatchHistoryResponse">
-        SELECT t.team_no                                                                             AS teamNo
+        SELECT m.match_hist_no	AS matchHistoryNo
+              ,t.team_no                                                                             AS teamNo
              , t.match_type                                                                          AS matchType
              , t.team_rating                                                                         AS teamRating
              , t.team_name                                                                           AS teamName
