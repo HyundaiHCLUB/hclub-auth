@@ -8,6 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class MypageMatchHistoryResponse {
+    private Long    matchHistoryNo;     //경기번호
     private Long    teamNo;             // 팀 번호
     private String  matchType;          // 종목
     private String  teamName;           // 팀이름
