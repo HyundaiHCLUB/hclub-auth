@@ -65,7 +65,8 @@
     </select>
 
     <select id="getMypageClubInfo" resultType="site.hclub.hyndai.dto.response.MypageClubResponse">
-        SELECT c.club_name                         AS clubName
+        SELECT c.club_no
+             , c.club_name                         AS clubName
              , c.club_image                        AS clubImage
              , c.club_info                         AS clubInfo
              , c.club_loc                          AS clubLoc
