@@ -263,6 +263,18 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MatchHistoryDetailResponse getHistoryDetail(Long matchHistoryNo) {
         MatchHistoryDetailResponse response = memberMapper.getHistoryDetail(matchHistoryNo);
+        if(response == null)
+        {
+            response = new MatchHistoryDetailResponse();
+            response.setMatchHistoryNo(matchHistoryNo);
+            response.setMatchLoc("아직 경기가 종료되지 않았습니다");
+            response.setWinTeamScoreNo(-1L);
+            response.setWinTeamScoreAmount(-1L);
+            response.setLoseTeamScoreNo(-1L);
+            response.setLoseTeamScoreAmount(-1L);
+            response.setImageUrl("아직 경기가 종료되지 않았습니다");
+        }
+        log.info(response.toString());
         return response;
     }
 }
