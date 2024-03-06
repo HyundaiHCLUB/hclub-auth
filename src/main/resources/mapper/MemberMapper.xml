@@ -8,8 +8,7 @@
     <select id="getMemberInfo" resultType="site.hclub.hyndai.domain.MemberVO" parameterType="String">
         SELECT M.MEMBER_NO                                                                    as memberNo
              , M.MEMBER_ID                                                                    as memberId
-             , NVL(M.MEMBER_IMAGE,
-                   'https://h-clubbucket.s3.ap-northeast-2.amazonaws.com/profile/242474.jpg') as memberImage
+             , M.MEMBER_IMAGE                                                                 as memberImage
              , M.MEMBER_INTEREST                                                              as memberInterest
              , M.MEMBER_RATING                                                                as memberRating
              , M.EMPLOYEE_NO                                                                  as employeeNo
