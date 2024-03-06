@@ -98,7 +98,7 @@
              , t.team_name                                                                           AS teamName
              , t.match_capacity                                                                      AS matchCapacity
              , m.match_loc                                                                           AS matchLoc
-             , m.match_date                                                                          AS matchDate
+             , TO_CHAR(m.match_date, 'YYYY/MM/DD HH24"시" MI"분"')                                    AS matchDate                               AS matchDate
              , (SELECT score_no FROM SCORE WHERE score_no = m.win_team_score_no)                     AS winTeamScoreNo
              , (SELECT score_amount FROM SCORE WHERE score_no = m.win_team_score_no)                 AS winTeamScoreAmount
              , (SELECT score_no FROM SCORE WHERE score_no = m.lose_team_score_no)                    AS loseTeamScoreNo
