@@ -90,7 +90,35 @@
 
     <select id="getMypageMatchHistory" parameterType="String"
             resultType="site.hclub.hyndai.dto.response.MypageMatchHistoryResponse">
-
+        SELECT m.match_hist_no	AS matchHistoryNo
+             ,t.team_no                                                                             AS teamNo
+             , t.match_type                                                                          AS matchType
+             , t.team_rating                                                                         AS teamRating
+             , t.team_name                                                                           AS teamName
+             , t.match_capacity                                                                      AS matchCapacity
+             , m.match_loc                                                                           AS matchLoc
+             , TO_CHAR(m.match_date, 'YYYY/MM/DD HH24"시" MI"분"')                                    AS matchDate
+             , (SELECT score_no FROM SCORE WHERE score_no = m.win_team_score_no)                     AS winTeamScoreNo
+             , (SELECT score_amount FROM SCORE WHERE score_no = m.win_team_score_no)                 AS winTeamScoreAmount
+             , (SELECT score_no FROM SCORE WHERE score_no = m.lose_team_score_no)                    AS loseTeamScoreNo
+             , (SELECT score_amount FROM score WHERE score_no = m.lose_team_score_no)                AS loseTeamScoreAmount
+             , (SELECT team_no
+                FROM score
+                WHERE score_no = (SELECT score_no FROM SCORE WHERE score_no = m.win_team_score_no))  AS winTeamNo
+             , (SELECT team_no
+                FROM score
+                WHERE score_no = (SELECT score_no FROM SCORE WHERE score_no = m.lose_team_score_no)) AS loseTeamNo
+        FROM member mb
+                 JOIN member_team mt
+                      ON mb.member_no = mt.member_no
+                 JOIN team t
+                      ON mt.team_no = t.team_no
+                 JOIN score s
+                      ON s.team_no = t.team_no
+                 JOIN match m
+                      ON s.score_no = m.win_team_score_no
+                          OR s.score_no = m.lose_team_score_no
+        WHERE mb.member_id = #{memberId}
     </select>
     <select id="getMyPageProceedingMatchList" parameterType="String"
             resultType="site.hclub.hyndai.dto.response.MyPageProceedingMatchResponse">
