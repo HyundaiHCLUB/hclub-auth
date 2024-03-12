@@ -155,7 +155,8 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /***
+    /**
+     * @autor 송원선
      *  마이페이지 - 내가 속한 동아리
      */
     @GetMapping("/mypage/clubs")
@@ -195,7 +196,8 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /***
+    /**
+     * @autor 송원선
      *  마이페이지 - 매치 히스토리
      */
     @GetMapping(value = "/mypage/history")
@@ -241,7 +243,8 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /***
+    /**
+     * @autor 송원선
      *  마이페이지 - 진행 중인 매치
      */
     @GetMapping("/mypage/match")
@@ -289,6 +292,7 @@ public class MemberController {
     }
 
     /**
+     * @autor 송원선
      * 마이페이지 - 회원정보 수정
      * 비밀번호
      */
@@ -317,6 +321,7 @@ public class MemberController {
 
 
     /**
+     * @autor 송원선
      * 마이페이지 - 프로필 사진 변경
      */
     @PostMapping(value = "/mypage/profile",
@@ -338,6 +343,7 @@ public class MemberController {
 
 
     /**
+     * @autor 송원선
      * 상품 등록 API
      * - S3 이미지 업로드
      * - DB 에 상품정보 저장 (상품명, 가격, 상품 이미지 url)
@@ -361,6 +367,7 @@ public class MemberController {
     }
 
     /**
+     * @autor 송원선
      * 받은 선물 목록 API (마이페이지 - 받은 선물함)
      */
     @GetMapping(value = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -403,7 +410,10 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /* 마이페이지 -> 매치히스토리 -> 각 매치별 상세정보 */
+    /**
+     * @autor 송원선
+     *  마이페이지 -> 매치히스토리 -> 각 매치별 상세정보
+     *  */
     @GetMapping("/mypage/history/detail/{matchHistoryNo}")
     public ResponseEntity<MatchHistoryDetailResponse> getHistoryDetail(@PathVariable("matchHistoryNo")Long matchHistoryNo) {
 
