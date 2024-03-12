@@ -241,8 +241,11 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /***
-     *  마이페이지 - 진행 중인 매치
+    /**
+     @author: 김동욱
+     @description: 마이페이지 - 진행 중인 매치 목록 가져오기
+     @request : @RequestHeader
+     @response : ProceedingMatchList
      */
     @GetMapping("/mypage/match")
     public ResponseEntity<List<MyPageProceedingMatchResponse>> getMyPageProceedingMatchInfo(Principal principal, HttpServletRequest request) {
@@ -250,7 +253,7 @@ public class MemberController {
         // "Authorization" 헤더에서 토큰을 추출
         String token = request.getHeader("Authorization");
         List<MyPageProceedingMatchResponse> response = new ArrayList<>();
-        log.info("token == " + token);
+
         String memberId = "";
         if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7); // "Bearer "을 제거합니다.

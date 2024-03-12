@@ -173,37 +173,6 @@ public class MemberServiceImpl implements MemberService {
         MemberVO mvo = memberMapper.getMemberInfo(memberId);
         Long memberNo = mvo.getMemberNo();
         String memberName = mvo.getEmployeeName();
-        // logic
-        if(memberName.equals("천우희")){
-            try{
-                Thread.sleep(3000);
-            }
-            catch (InterruptedException e){
-                Thread.currentThread().interrupt();
-            }
-            clubMapper.insertMemberClubInterest(memberNo,93L);
-            clubMapper.insertMemberClubInterest(memberNo,94L);
-            clubMapper.insertMemberClubInterest(memberNo,109L);
-            clubMapper.insertMemberClubInterest(memberNo,82L);
-
-            return;
-        }
-        if(memberName.equals("안재홍")){
-            try{
-                Thread.sleep(3000);
-            }
-            catch (InterruptedException e){
-                Thread.currentThread().interrupt();
-            }
-
-            clubMapper.insertMemberClubInterest(memberNo,102L);
-            clubMapper.insertMemberClubInterest(memberNo,93L);
-            clubMapper.insertMemberClubInterest(memberNo,90L);
-            clubMapper.insertMemberClubInterest(memberNo,101L);
-
-            return;
-        }
-
 
 
         log.info("insertMemberClubInterest" + memberNo + " " + interests);
@@ -218,11 +187,12 @@ public class MemberServiceImpl implements MemberService {
 
         HttpEntity<Map<String, List<String>>> request = new HttpEntity<>(requestBody, httpHeaders);
 
+        // Fast API 서버 통신
         HobbiesClassifiedResponse response = restTemplate.postForObject(url, request, HobbiesClassifiedResponse.class);
 
         List<Integer> topInterestList = response.getHobbies();
         topInterestList.remove(topInterestList.size() - 1);
-        log.info("분류된 관심사" + topInterestList.toString());
+
 
         List<int[]> indexedNumbers = new ArrayList<>();
         for (int i = 0; i < topInterestList.size(); i++) {
@@ -244,7 +214,6 @@ public class MemberServiceImpl implements MemberService {
                 .collect(Collectors.toList());
 
         // 동아리 insert
-
         for (int interestNo : interestCategoryList) {
             Long clubNo = clubMapper.getClubByCategory(interestNo);
             clubMapper.insertMemberClubInterest(memberNo, clubNo);

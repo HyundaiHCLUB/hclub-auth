@@ -39,8 +39,8 @@ public interface MemberService {
     String resolveToken(HttpServletRequest request);
 
     /**
-     * 작성자: 김은솔
-     * 처리 내용: 회원 정보를 바탕으로 Member테이블에 삽입한다.
+     * 작성자: 김동욱
+     * 처리 내용: 멤버 정보를 삽입한다.
      */
     void insertMemberInfo(MemberVO mvo);
 
@@ -52,9 +52,15 @@ public interface MemberService {
     void updateMemberInfo(UpdateMemberInfoRequest request);
 
     List<MypageMatchHistoryResponse> getMypageMatchHistory(String memberId);
-
+    /**
+     * 작성자: 김동욱
+     * 처리 내용: 현재 진행 중인 매치 목록을 불러옵니다.
+     */
     List<MyPageProceedingMatchResponse> getMyPageProceedingMatch(String memberId);
-
+    /**
+     * 작성자: 김동욱
+     * 처리 내용: 유저 관심사 기반으로 동아리를 추천해줍니다.
+     */
     void insertMemberClubInterest(String memberId, String interests);
 
     String updateProfileImage(MultipartFile multipartFile, String memberId) throws IOException;

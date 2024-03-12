@@ -55,6 +55,10 @@ public interface MemberMapper {
 
     List<MypageMatchHistoryResponse> getMypageMatchHistory(String memberId);
 
+    /**
+     * 작성자: 김동욱
+     * 처리 내용: 마이페이지 - 현재 유저가 진행 중인 매치목록을 조회합니다.
+     */
     List<MyPageProceedingMatchResponse> getMyPageProceedingMatchList(String memberId);
 
     void updateProfileImage(@Param("url") String url, @Param("memberId") String memberId);
