@@ -10,7 +10,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
+/**
+ * @author 김동욱
+ * @description: AWS S3 파일 업로드 Config File
+ * ===========================
+AUTHOR      NOTE
+ * ---------------------------
+ *    김동욱        최초생성
+ * ===========================
+ */
 @Configuration
 @PropertySource("classpath:application.yml")
 public class AmazonS3Config {

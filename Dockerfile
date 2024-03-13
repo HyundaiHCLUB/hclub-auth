@@ -1,7 +1,13 @@
-
+# 작성자 : 김동욱
+# H-CLUB AUTH Dockerfile
+# ===========================
+# 	   AUTHOR      NOTE
+# ---------------------------
+#    김동욱         최초생성
+# ===========================
 FROM maven:3.6-jdk-11 as build
 
-# Copy the project files into the container
+
 COPY src /home/app/src
 COPY pom.xml /home/app
 

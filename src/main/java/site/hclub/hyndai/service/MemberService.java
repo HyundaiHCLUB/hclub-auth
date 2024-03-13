@@ -39,33 +39,72 @@ public interface MemberService {
     String resolveToken(HttpServletRequest request);
 
     /**
-     * 작성자: 김은솔
-     * 처리 내용: 회원 정보를 바탕으로 Member테이블에 삽입한다.
+     * 작성자: 김동욱
+     * 처리 내용: 멤버 정보를 삽입한다.
      */
     void insertMemberInfo(MemberVO mvo);
 
-    /* 마이페이지 - 기본 인적사항*/
+    /**
+     * 작성자: 송원선
+     * 처리 내용: 마이페이지 - 기본 인적사항
+     */
     MyPageInfoResponse getMypageUserInfo(String memberId);
 
+    /**
+     * 작성자: 송원선
+     * 처리 내용: <내모임> 목록
+     */
     List<MypageClubResponse> getMypageClubInfo(String memberId);
 
+    /**
+     * 작성자: 송원선
+     * 처리 내용: 회원정보수정
+     */
     void updateMemberInfo(UpdateMemberInfoRequest request);
 
+    /**
+     * 작성자: 송원선
+     * 처리 내용: 마이페이지 - 매치히스토리
+     */
     List<MypageMatchHistoryResponse> getMypageMatchHistory(String memberId);
-
+    /**
+     * 작성자: 김동욱
+     * 처리 내용: 현재 진행 중인 매치 목록을 불러옵니다.
+     */
     List<MyPageProceedingMatchResponse> getMyPageProceedingMatch(String memberId);
-
+    /**
+     * 작성자: 김동욱
+     * 처리 내용: 유저 관심사 기반으로 동아리를 추천해줍니다.
+     */
     void insertMemberClubInterest(String memberId, String interests);
 
+    /**
+     * 작성자: 송원선
+     * 처리 내용: 프로필 이미지 수정
+     */
     String updateProfileImage(MultipartFile multipartFile, String memberId) throws IOException;
 
-    // S3 에 상품 이미지 업로드
+    /**
+     * 작성자: 송원선
+     * 처리 내용: S3 상품 이미지 업로드
+     */
     String insertProductImage(MultipartFile multipartFile);
 
-    // DB에 상품 정보 저장
+    /**
+     * 작성자: 송원선
+     * 처리 내용: 상품정보 DB 저장
+     */
     void saveProductInfo(RegisterProductsRequest request);
 
+    /**
+     * 작성자: 송원선
+     * 처리 내용: 마이페이지 - 내 선물함
+     */
     List<MypageProductsResponse> getMyProducts(String memberId);
 
+    /**
+     * 작성자: 송원선
+     * 처리 내용: 마이페이지 - 매치히스토리 - 상세보기
+     */
     MatchHistoryDetailResponse getHistoryDetail(Long matchHistoryNo);
 }
