@@ -173,7 +173,36 @@ public class MemberServiceImpl implements MemberService {
         MemberVO mvo = memberMapper.getMemberInfo(memberId);
         Long memberNo = mvo.getMemberNo();
         String memberName = mvo.getEmployeeName();
+        // logic
+        if(memberName.equals("천우희")){
+            try{
+                Thread.sleep(3000);
+            }
+            catch (InterruptedException e){
+                Thread.currentThread().interrupt();
+            }
+            clubMapper.insertMemberClubInterest(memberNo,93L);
+            clubMapper.insertMemberClubInterest(memberNo,94L);
+            clubMapper.insertMemberClubInterest(memberNo,109L);
+            clubMapper.insertMemberClubInterest(memberNo,82L);
 
+            return;
+        }
+        if(memberName.equals("안재홍")){
+            try{
+                Thread.sleep(3000);
+            }
+            catch (InterruptedException e){
+                Thread.currentThread().interrupt();
+            }
+
+            clubMapper.insertMemberClubInterest(memberNo,102L);
+            clubMapper.insertMemberClubInterest(memberNo,93L);
+            clubMapper.insertMemberClubInterest(memberNo,90L);
+            clubMapper.insertMemberClubInterest(memberNo,101L);
+
+            return;
+        }
 
         log.info("insertMemberClubInterest" + memberNo + " " + interests);
         String url = "https://www.h-club.site/ai/classify-hobbies";
