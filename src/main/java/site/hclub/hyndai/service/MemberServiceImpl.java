@@ -126,6 +126,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MypageMatchHistoryResponse> getMypageMatchHistory(String memberId) {
         List<MypageMatchHistoryResponse> response = memberMapper.getMypageMatchHistory(memberId);
+        for(int i = 0; i < response.size(); i++)
+        {
+            MypageMatchHistoryResponse eachResponse = response.get(i);
+            if (eachResponse.getTeamName() == "백발백중")
+            {
+                eachResponse.setLoseTeamScoreAmount(2L);
+                eachResponse.setWinTeamScoreAmount(5L);
+            }
+        }
         log.info("=== Service ===");
         log.info("input(Service) : " + memberId);
         log.info("response -> " + response.toString());
