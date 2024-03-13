@@ -16,6 +16,16 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
+
+/**
+ * @author 김은솔
+ * @description: DataSource 설정
+ * ===========================
+	   AUTHOR      NOTE
+ * ---------------------------
+ *     김은솔        최초생성    
+ * ===========================
+ */
 @Configuration
 @MapperScan(value = "site.hclub.hyndai.mapper")
 @PropertySource("classpath:application.yml")
