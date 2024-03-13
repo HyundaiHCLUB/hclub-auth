@@ -129,7 +129,7 @@ public class MemberServiceImpl implements MemberService {
         for(int i = 0; i < response.size(); i++)
         {
             MypageMatchHistoryResponse eachResponse = response.get(i);
-            if (eachResponse.getTeamName() == "백발백중")
+            if (eachResponse.getTeamName().equals("백발백중"))
             {
                 eachResponse.setLoseTeamScoreAmount(2L);
                 eachResponse.setWinTeamScoreAmount(5L);
