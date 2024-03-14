@@ -4,8 +4,15 @@ import org.apache.ibatis.annotations.Param;
 
 public interface ClubMapper {
 
-    // 카테고리별 인기 동아리를 가져옵니다.
+    /**
+     * 작성자: 김동욱
+     * 처리 내용: 해당 카테고리에 해당하는 동아리를 불러옵니다.
+     */
     Long getClubByCategory(int categoryNo);
-    // 유저 추천동아리를 추가해줍니다.
+
+    /**
+     * 작성자: 김동욱
+     * 처리 내용: 유저에 해당하는 추천 동아리 삽입해줍니다.
+     */
     int insertMemberClubInterest(@Param("memberNo") Long memberNo, @Param("clubNo") Long clubNo);
 }

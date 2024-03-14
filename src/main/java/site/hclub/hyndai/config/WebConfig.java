@@ -9,7 +9,15 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration;
-
+/**
+ * @author 김동욱
+ * @description: WebConfig File
+ * ===========================
+AUTHOR      NOTE
+ * ---------------------------
+ *    김동욱        최초생성
+ * ===========================
+ */
 @Configuration
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
 
@@ -27,8 +35,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         return new Class[]{
                 ServletContextConfig.class,
                 CorsConfig.class, RestTemplateConfig.class
-        
-                // SecurityConfig.class
+
         };
     }
 

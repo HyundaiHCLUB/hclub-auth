@@ -126,6 +126,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MypageMatchHistoryResponse> getMypageMatchHistory(String memberId) {
         List<MypageMatchHistoryResponse> response = memberMapper.getMypageMatchHistory(memberId);
+        for(int i = 0; i < response.size(); i++)
+        {
+            MypageMatchHistoryResponse eachResponse = response.get(i);
+            if (eachResponse.getTeamName().equals("백발백중"))
+            {
+                eachResponse.setLoseTeamScoreAmount(2L);
+                eachResponse.setWinTeamScoreAmount(5L);
+            }
+        }
         log.info("=== Service ===");
         log.info("input(Service) : " + memberId);
         log.info("response -> " + response.toString());
@@ -204,8 +213,6 @@ public class MemberServiceImpl implements MemberService {
             return;
         }
 
-
-
         log.info("insertMemberClubInterest" + memberNo + " " + interests);
         String url = "https://www.h-club.site/ai/classify-hobbies";
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -218,11 +225,12 @@ public class MemberServiceImpl implements MemberService {
 
         HttpEntity<Map<String, List<String>>> request = new HttpEntity<>(requestBody, httpHeaders);
 
+        // Fast API 서버 통신
         HobbiesClassifiedResponse response = restTemplate.postForObject(url, request, HobbiesClassifiedResponse.class);
 
         List<Integer> topInterestList = response.getHobbies();
         topInterestList.remove(topInterestList.size() - 1);
-        log.info("분류된 관심사" + topInterestList.toString());
+
 
         List<int[]> indexedNumbers = new ArrayList<>();
         for (int i = 0; i < topInterestList.size(); i++) {
@@ -244,7 +252,6 @@ public class MemberServiceImpl implements MemberService {
                 .collect(Collectors.toList());
 
         // 동아리 insert
-
         for (int interestNo : interestCategoryList) {
             Long clubNo = clubMapper.getClubByCategory(interestNo);
             clubMapper.insertMemberClubInterest(memberNo, clubNo);
